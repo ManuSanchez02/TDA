@@ -1,8 +1,7 @@
-import random
+from utils import random_sorted_array
 
-def random_sorted_array(n):
-    return sorted(random.randint(0, 1000) for i in range(n))
 
+# O(n)
 def merge(array1, array2):
     i = 0
     j = 0
@@ -18,30 +17,41 @@ def merge(array1, array2):
     while i < len(array1):
         res.append(array1[i])
         i += 1
-    
+
     while j < len(array2):
         res.append(array2[j])
         j += 1
 
     return res
 
+# O(n)
 def split(array):
-    half = len(array)//2
+    half = len(array) // 2
     return array[half:], array[:half]
 
+# N = k*h
+# T(k, h) = 2T(k/2, h) + O(k*h)
+# T(N) = 2T(N/2) + O(N)
+# A = 2, B = 2, C = 1
+#
+# log_B(A) = 1 = C
+# T(N) = O(N^C * log_B(N)) = O(N * log(N))
+# T(N) = O(kh * log(kh))
 def kmerge(*arrays):
     if len(arrays) == 1:
         return arrays[0]
     elif len(arrays) == 2:
         return merge(arrays[0], arrays[1])
-    
+
     left_half, right_half = split(arrays)
     return merge(kmerge(*left_half), kmerge(*right_half))
 
-A = random_sorted_array(10)
-B = random_sorted_array(10)
-C = random_sorted_array(10)
-D = random_sorted_array(10)
-expected = sorted(A + B + C + D)
-assert kmerge(A, B, C, D) == expected
-print('OK')
+
+if __name__ == '__main__':
+    A = random_sorted_array(10)
+    B = random_sorted_array(10)
+    C = random_sorted_array(10)
+    D = random_sorted_array(10)
+    expected = sorted(A + B + C + D)
+    assert kmerge(A, B, C, D) == expected
+    print('OK')
