@@ -2,6 +2,9 @@ from utils import random_sorted_array
 from math import inf
 import heapq
 
+# Details
+# heapq.heappush complexity: O(log(n))
+# heapq.heappop complexity: O(log(n))
 
 class HeapElement:
     def __init__(self, arrays, array_index, element_index):
@@ -15,14 +18,14 @@ class HeapElement:
     def __gt__(self, other):
         return self.value > other
 
-
+# O(k * log(k))
 def initialize_heap(heap, *arrays):
     for i, array in enumerate(arrays):
         if len(array) > 0:
             element = HeapElement(arrays, i, 0)
             heapq.heappush(heap, element)
 
-
+# O(log(k))
 def push_next(heap, arrays, array_index, element_index):
     if element_index + 1 < len(arrays[array_index]):
         new_element = HeapElement(arrays, array_index, element_index + 1)
@@ -30,7 +33,8 @@ def push_next(heap, arrays, array_index, element_index):
     else:
         heapq.heappush(heap, inf)
 
-
+# O(k * log(k)) + O(k*h*log(k)) = O(k*h*log(k))
+# O(N*log(k))
 def kmerge(*arrays):
     heap = []
     initialize_heap(heap, *arrays)
