@@ -17,9 +17,10 @@ class HeapElement:
 
 
 def initialize_heap(heap, *arrays):
-    for i in range(len(arrays)):
-        element = HeapElement(arrays, i, 0)
-        heapq.heappush(heap, element)
+    for i, array in enumerate(arrays):
+        if len(array) > 0:
+            element = HeapElement(arrays, i, 0)
+            heapq.heappush(heap, element)
 
 
 def push_next(heap, arrays, array_index, element_index):
