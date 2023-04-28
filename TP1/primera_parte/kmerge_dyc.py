@@ -1,6 +1,5 @@
 from utils import random_sorted_array
 
-
 # O(n)
 def merge(array1, array2):
     i = 0

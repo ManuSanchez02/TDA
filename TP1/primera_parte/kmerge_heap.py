@@ -18,12 +18,19 @@ class HeapElement:
     def __gt__(self, other):
         return self.value > other
 
-# O(k * log(k))
-def initialize_heap(heap, *arrays):
+# O(k)
+def initialize_heap(*arrays):
+    heap = []
+
+    # O(k)
     for i, array in enumerate(arrays):
         if len(array) > 0:
             element = HeapElement(arrays, i, 0)
-            heapq.heappush(heap, element)
+            heap.append(element)
+
+    # O(k)
+    heapq.heapify(heap)
+    return heap
 
 # O(log(k))
 def push_next(heap, arrays, array_index, element_index):
@@ -33,15 +40,21 @@ def push_next(heap, arrays, array_index, element_index):
     else:
         heapq.heappush(heap, inf)
 
-# O(k * log(k)) + O(k*h*log(k)) = O(k*h*log(k))
+# O(k) + O(k*h*log(k)) = O(k*h*log(k))
 # O(N*log(k))
 def kmerge(*arrays):
-    heap = []
-    initialize_heap(heap, *arrays)
+    # O(k)
+    heap = initialize_heap(*arrays)
+    
     res = []
 
+    # O (k*h)
     while len(res) < len(arrays) * len(arrays[0]):
+
+        # O(log k)
         min_value = heapq.heappop(heap)
+
+        # O(log k)
         push_next(heap, arrays, min_value.array_index, min_value.element_index)
         res += [min_value.value]
     return res

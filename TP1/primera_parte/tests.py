@@ -4,8 +4,8 @@ from utils import random_sorted_array
 # -------------------------------
 # |    COMMENT ONE OF THESE:    |
 # -------------------------------
-from kmerge_dyc import kmerge
-# from kmerge_heap import kmerge
+# from kmerge_dyc import kmerge
+from kmerge_heap import kmerge
 
 
 class TestKMerge(unittest.TestCase):
