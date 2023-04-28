@@ -56,7 +56,7 @@ def kmerge(*arrays):
 
         # O(log k)
         push_next(heap, arrays, min_value.array_index, min_value.element_index)
-        res += [min_value.value]
+        res.append(min_value.value)
     return res
 
 
