@@ -34,6 +34,6 @@ En nuestra implementacion, dicho algoritmo esta compuesto por:
   - Se inserta un nuevo elemento al heap usando `push_next`, el cual tiene una complejidad de O(log k).
   - Se concatena el valor minimo al arreglo de resultado, lo cual tiene una complejidad de O(1).
 
-  En total, la complejidad obtenida dentro del `while` es O(log k), y repitiendolo $k*h$ veces, resulta en una complejidad de $O(k h \* log k).
+  En total, la complejidad obtenida dentro del `while` es O(log k), y repitiendolo $k*h$ veces, resulta en una complejidad de O(k h \* log k).
 
 ## Segunda parte
