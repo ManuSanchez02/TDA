@@ -1,5 +1,4 @@
-# Teoría de Algoritmos I (75.29, 95.06) – Curso Buchwald - Genender
-
+# Trabajo Práctico 1
 ## Integrantes:
 
 | Nombre         | Padrón | Email               |
