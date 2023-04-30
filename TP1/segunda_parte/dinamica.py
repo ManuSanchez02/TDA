@@ -43,6 +43,9 @@ def sobornar_dinamico_iterativo(valores, valor_total):
 
 
 def reconstruir_solucion(valores, input_original, valor_total, m):
+    if valor_total < 0:
+        raise Exception("No hay solucion posible")
+
     n = len(valores)
     solucion = []
     for i in range(1, n+1):
@@ -58,17 +61,14 @@ def reconstruir_solucion(valores, input_original, valor_total, m):
     return solucion
 
 
-def sobornar_dinamico(valores, valor_total):
-    m, aproximacion_mas_cercana = sobornar_dinamico_iterativo(
-        valores, valor_total)
-    imprimir_matriz(m)
-    return reconstruir_solucion(valores, valor_total, aproximacion_mas_cercana, m)
+def sobornar_dinamico(mercaderia, soborno):
+    solucion = {}
+    for producto, cantidad in soborno.items():
+        matriz_soluciones, aproximacion_mas_cercana = sobornar_dinamico_iterativo(mercaderia[producto], cantidad)
+        imprimir_matriz(matriz_soluciones)
+        solucion[producto] = reconstruir_solucion(mercaderia[producto], cantidad, aproximacion_mas_cercana, matriz_soluciones)
+    return solucion
 
-
-items = [5, 8, 9, 6, 2]
-solucion = sobornar_dinamico(items, 23)
-print(solucion)
-print(sum(solucion))
 
 mercaderia = {
     'Cigarrillo': [8, 5],
@@ -76,13 +76,8 @@ mercaderia = {
 }
 
 soborno_2 = {
-    "Cigarrillo": 10,
+    "Cigarrillo": 13,
     "Vodka": 1
 }
 
-solucion = {}
-for soborno in soborno_2:
-    solucion[soborno] = sobornar_dinamico(
-        mercaderia[soborno], soborno_2[soborno])
-
-print(solucion)
+print(sobornar_dinamico(mercaderia, soborno_2))
