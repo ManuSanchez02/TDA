@@ -30,8 +30,11 @@ def sobornar_dinamico_iterativo(valores, valor_total):
             aproximacion_con = m[i-1][max(j-valor_actual, 0)]+valor_actual
             if aproximacion_sin < j and aproximacion_con < j:
                 continue
-
-            if distancia(aproximacion_sin, valor_total) < distancia(aproximacion_con, valor_total):
+            elif aproximacion_sin > j and aproximacion_con < j:
+                m[i][j] = aproximacion_sin
+            elif aproximacion_sin < j and aproximacion_con > j:
+                m[i][j] = aproximacion_con
+            elif distancia(aproximacion_sin, valor_total) < distancia(aproximacion_con, valor_total):
                 m[i][j] = aproximacion_sin
             else:
                 m[i][j] = aproximacion_con
@@ -44,14 +47,13 @@ def reconstruir_solucion(valores, input_original, valor_total, m):
     solucion = []
     for i in range(1, n+1):
         valor_actual = valores[n-i]
-
-        if (m[n-i][input_original-valor_actual] == valor_total-valor_actual):
+        if valor_total == valor_actual:
+            solucion.append(valor_actual)
+            valor_total = 0
+        elif (m[n-i][input_original-valor_actual] == valor_total-valor_actual):
             solucion.append(valor_actual)
             input_original -= valor_actual
             valor_total -= valor_actual
-        elif valor_total == valor_actual:
-            solucion.append(valor_actual)
-            valor_total = 0
 
     return solucion
 
@@ -67,3 +69,20 @@ items = [5, 8, 9, 6, 2]
 solucion = sobornar_dinamico(items, 23)
 print(solucion)
 print(sum(solucion))
+
+mercaderia = {
+    'Cigarrillo': [8, 5],
+    'Vodka': [5]
+}
+
+soborno_2 = {
+    "Cigarrillo": 10,
+    "Vodka": 1
+}
+
+solucion = {}
+for soborno in soborno_2:
+    solucion[soborno] = sobornar_dinamico(
+        mercaderia[soborno], soborno_2[soborno])
+
+print(solucion)
