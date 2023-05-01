@@ -1,7 +1,8 @@
 import random
 import unittest
 
-from p_dinamica import sobornar
+# from p_dinamica import sobornar
+from dinamica import sobornar_dinamico
 from utils import random_array
 
 random.seed(10)
@@ -17,7 +18,7 @@ class TestSoborno(unittest.TestCase):
         self.assertEqual(solution, expected)
 
     def setUp(self):
-        self.alg_soborno = sobornar
+        self.alg_soborno = sobornar_dinamico
 
         self.mercaderia_ejemplo = {
             'Cigarrillo': [8, 5],
