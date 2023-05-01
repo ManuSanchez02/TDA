@@ -9,6 +9,22 @@
 
 ## Primera parte
 
+### División y conquista
+
+#### Complejidad segun Teorema Maestro
+
+Al ser un algoritmo que hace uso del concepto de división y conquista, para calcular la complejidad podemos usar el Teorema Maestro. Para ello, debemos establecer los valores de $A$, $B$ y $C$ en la ecuacion de recurrencia de forma $T(N) = A*T(\frac{N}{B}) + f(N)$.
++ $A$ es la cantidad de llamados recursivos. En este caso, se puede observar claramente como hay 2 llamados recursivos, uno por cada mitad del arreglo de arreglos. Consecuentemente, quedaria $A = 2$.
++ $B$ es en cuanto se divide el subproblema por cada llamado recursivo. El problema es dividido en 2 por cada llamado ya que cada uno de estos recibe una mitad del arreglo de arreglos. Por lo tanto, concluimos que $B = 2$.
++ $f(n)$ es el coste de las operaciones no recursivas. Estas operaciones son `split` y `merge`.
+  + `split`: Su funcion es dividir el arreglo de arreglos en 2, y retornar una tupla con cada mitad. Al estar usando python, la complejidad de hacer un slice es $O(h)$, siendo $h$ la cantidad de elementos en el arreglo de arreglos, por lo cual esa es la complejidad de este algoritmo.
+  + `merge`: Esta funcion se encarga de combinar 2 arreglos de numeros de forma que el orden ascendente se mantenga. Eventualmente, el algoritmo va a llegar a un punto donde va a tener 2 arreglos, cada uno con la mitad de elementos totales y tendra que combinar ambos. Este es el peor caso del algoritmo, en cuyo caso debe hacer $N$ comparaciones, siendo $N=k*h$ (con $k$ siendo la cantidad de arreglos y $h$ la cantidad de elementos por arreglo).
+  
+  En consecuencia, el coste no recursivo es $O(N)$ con $N$ siendo la cantidad de elementos totales. En este caso del Teorema Maestro, podemos buscar un valor para $C$ de forma que $O(N^c) = O(N)$. Resolviendo esta simple igualdad, llegamos a $C=1$.
+
+Considerando todo esto, caemos en el segundo caso del Teorema Maestro, donde $A = B^C$. En conclusion, la complejidad del algoritmo segun el Teorema Maestro es $O(N^C*log(N)) = O(N*log(N)) = O(kh*log(kh))$.
+
+
 ### "El algoritmo que usa heaps"
 
 #### Descripcion
@@ -45,7 +61,21 @@ En nuestra implementacion, dicho algoritmo esta compuesto por:
     - Se concatena el valor minimo al arreglo de resultado, lo cual tiene una complejidad de O(1).
 
   En total, la complejidad obtenida dentro del `while` es O(log k), y repitiendolo $k*h$ veces, resulta en una
-  complejidad de O(k h \* log k).
+  complejidad de $O(k h * log(k))$.
+
+### Complejidad real de DyC
+
+El problema con la complejidad hallada es que no se condice con los graficos creados. La complejidad obtenida en el algoritmo de heaps es $O(k h  * log(k))$, mientras que la del algoritmo de DyC es $O(k h * log(k h))$. Es decir, la complejidad temporal del algoritmo de heaps es menor. Sin embargo, esto no se ve reflejado en los graficos.
+![Grafico k constante](./graficos/k_constante.png)
+![Grafico h constante](./graficos/h_constante.png)
+
+En estos graficos se puede apreciar como la complejidad del algoritmo de heaps aparenta ser mayor a la del algoritmo de división y conquista.
+
+El problema con la complejidad obtenida es que segun la misma, el factor $log(kh)$ indica que la cantidad de llamados recursivos depende tanto de la cantidad de listas ($k$), como la cantidad de elementos ($h$). Sin embargo, esto esta lejos de la realidad ya que la recursividad del algoritmo solo depende de la cantidad de arreglos y no de la cantidad de elementos. El arreglo de arreglos es el que se divide a la mitad, por lo que solo el valor $k$ entraria en la ecuacion para calcular la cantidad de llamados recursivos.
+
+La cantidad de elementos entra en juego unicamente en la operacion de `merge`, cuyo peor caso es tener que combinar 2 arreglos con $\frac{k*h}{2}$ elementos cada uno.
+
+Teniendo esto en cuenta, la complejidad total del algoritmo deberia ser $O(kh*log(k))$.
 
 ## Segunda parte: Problema del contrabando
 
