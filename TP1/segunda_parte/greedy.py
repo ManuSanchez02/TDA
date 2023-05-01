@@ -20,13 +20,16 @@ def es_mejor_solucion(cantidad_paquete, cantidad_ultimo_paquete, cantidad_restan
 
 
 def sobornar_greedy(mercaderia, soborno):
+    # O(k n log n)
     mercaderia = ordernar_mercaderia(mercaderia)
     mejor_soborno = {}
 
+    # O (k)
     for producto_pedido, cantidad_paquete in soborno.items():
         cantidad_restante = cantidad_paquete
         mejor_soborno[producto_pedido] = []
         cantidad_ultimo_paquete = None
+        # O(n)
         for cantidad_paquete in mercaderia[producto_pedido]:
 
             if cantidad_paquete < cantidad_restante:
@@ -53,6 +56,11 @@ mercaderia = {
 mercaderia2 = {
     'Cigarrillo': [8, 5, 3]
 }
+
+mercaderia3 = {
+    'Cigarrillo': [8, 6, 5]
+}
+
 
 soborno_1 = {
     "Cigarrillo": 6
@@ -89,9 +97,20 @@ sol_5 = {
     'Cigarrillo': [3]
 }
 
+# Ejemplo de caso donde el algoritmo greedy no funciona correctamente, al siempre buscar acercarse de la manera mas rapida a la solucion
+# Elige 8 como parte de la solucion, cuando la solucion mas optima es la utilizacion del 6 y el 5
+soborno_6 = {
+    'Cigarrillo': 11
+}
+
+sol_6 = {
+    'Cigarrillo': [6, 5]
+}
+
 assert sobornar_greedy(mercaderia, soborno_1) == sol_1
 assert sobornar_greedy(mercaderia, soborno_2) == sol_2
 assert sobornar_greedy(mercaderia, soborno_3) == sol_3
 assert sobornar_greedy(mercaderia2, soborno_4) == sol_4
 assert sobornar_greedy(mercaderia2, soborno_5) == sol_5
+assert sobornar_greedy(mercaderia3, soborno_6) == sol_6
 print("Todo OK")
