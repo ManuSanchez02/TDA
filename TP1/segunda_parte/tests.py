@@ -34,7 +34,6 @@ class TestSoborno(unittest.TestCase):
 
         solucion = {
             'Cigarrillo': [8]
-
         }
 
         self.assertCorrectPackages(
@@ -64,6 +63,21 @@ class TestSoborno(unittest.TestCase):
 
         self.assertCorrectPackages(
             self.alg_soborno(self.mercaderia_ejemplo, soborno), solucion)
+
+    def test_solucion_sin_paquete_grande(self):
+        mercaderia = {
+            "Cigarrillo": [8, 6, 5]
+        }
+
+        soborno = {
+            "Cigarrillo": 11
+        }
+
+        solucion = {
+            "Cigarrillo": [6, 5]
+        }
+
+        self.assertCorrectPackages(self.alg_soborno(mercaderia, soborno), solucion)
 
     def test_soborno_0(self):
         soborno = {
