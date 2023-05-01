@@ -132,6 +132,9 @@ porque siempre se tiene en cuenta el mas grande
 ### Generacion de set de datos
 
 Para la generacion de set de datos, se establece un `k` y un `n`, por cada `k` se crea un producto y se genera un
-arreglo aleatorio de tamaño `n`, de ese arreglo se selecciona `n // 3` elementos que va ser nuestro soborno para ese
-producto. El resultado correcto sera el resultado donde la suma de las cantidades de los paquetes sea igual al soborno
-determinado para el producto, sabemos que siempre se encontrara el optimo porque el soborno se elige del mismo arreglo.
+arreglo aleatorio de tamaño `n`, de ese arreglo se seleccionan `n // 3` elementos que van ser nuestro soborno para ese
+producto.
+
+El resultado correcto sera el resultado donde la suma de las cantidades de los paquetes sea igual al soborno determinado
+para el producto, sabemos que siempre se encontrara el optimo (para el caso de la solucion con programacion dinamica)
+porque el soborno se elige del mismo arreglo.
