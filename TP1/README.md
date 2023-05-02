@@ -103,31 +103,31 @@ El algoritmo greedy hace los siguientes pasos:
 1. Ordenar de mayor a menor los paquetes de cada producto de la mercaderia
 2. Por cada producto de la mercaderia
    1. Tomar un paquete y fijarse si alcanza para pagar todo el soborno
-      1. Si alcanza, me lo guardo como optimo local
+      1. Si alcanza, me lo guardo como optimo local. Si encuentro otro que ajuste mejor al soborno deseado, cambio el optimo local por este nuevo.
       2. Si no alcanza, lo agrego a la solucion
-3. Repetir 1 hasta que haber pagado todo el soborno
+3. Repetir desde 1 con el siguiente producto hasta que haber pagado todo el soborno
 
 El algoritmo es unicamente capaz de optimizar el ultimo paquete de cada producto. Si un paquete no alcanza para pagar el
 soborno, se agrega a la solucion y se pasa al siguiente paquete. Es decir, cuando no alcanza, siempre toma el mas
 grande. Esta es la parte donde falla y no es optimo. Sin embargo, por esta misma razon es lo que lo hace greedy, la
-solucion mas "voraz" siempre va a ser la que reduzca el soborno lo mas "rapido" posible
+solucion mas "voraz" siempre va a ser la que reduzca el soborno lo mas "rapido" posible.
 
 ### Programacion dinamica
 
 #### Descripcion general
 
-Analizando el problema detalladamente, nos damos cuenta que es similar al problema de la mochila, aunque a diferencia de
+Analizando el problema detalladamente, nos damos cuenta que es similar al problema de la mochila (y al de subset sum), aunque a diferencia de
 la mochila, tenemos mas de una "mochila" y no tenemos la posibilidad de dejarle menos unidades de los que nos pide el
 funcionario, tenemos que darle mas o la misma cantidad. Con estas consideraciones, diseñamos el siguiente algoritmo:
 
 1. Por cada producto:
    1. Creamos una matriz de soluciones, donde las filas son los paquetes y las columnas son los valores del soborno
-      para cada subproblema
-   2. Iteramos cada celda de la matriz, llenando cada una con la solucion al subproblema, tomando la siguiente decision
-      1. Buscamos la cantidad de productos que **minimice** la diferencia entre la cantidad y el soborno
+      para cada subproblema.
+   2. Iteramos cada celda de la matriz, llenando cada una con la solucion al subproblema, para ello:
+      1. Buscamos la cantidad de productos que **minimice** la diferencia entre la cantidad y el soborno, considerando que debe ser mayor o igual al soborno.
       2. Se elige entre el subproblema de no usar el paquete actual y el subproblema de usarlo pero considerando un
-         soborno menor y un paquete menos
-   3. Se reconstruye la solucion a partir de la matriz generada
+         soborno menor y un paquete menos.
+   3. Se reconstruye la solucion a partir de la matriz generada.
 
 ### Complejidad
 
@@ -155,10 +155,10 @@ Esto resulta en un algoritmo con complejidad total de $T(n, s, k) = O(k n * log(
 Por **cada producto**, construimos una matriz de $s$ columnas y $n$ filas, la iteramos y luego reconstruimos la solucion
 en base a la matriz.
 
-Construir una matriz $s$ _ $n$ cuesta $O(s _ n)$ lo mismo es iterarlo (todas las instrucciones se ejecutan en tiempo
+Construir una matriz $s_n$ cuesta $O(s _ n)$ lo mismo es iterarlo (todas las instrucciones se ejecutan en tiempo
 constante)
 
-Reconstruir la solucion tiene una complejidad de $O(n)$ debido al ciclo de 1 hasta n+1
+Reconstruir la solucion tiene una complejidad de $O(n)$ debido al ciclo de 1 hasta $n+1$
 
 El algoritmo para calcular los paquetes optimos para **un producto** resulta
 en $T(n, s) = O(s * n) + O(s * n) + O(n) = O (s * n)$
@@ -178,8 +178,8 @@ porque siempre se tiene en cuenta el mas grande
 
 ### Generacion de set de datos
 
-Para la generacion de set de datos, se establece un `k` y un `n`, por cada `k` se crea un producto y se genera un
-arreglo aleatorio de tamaño `n`, de ese arreglo se seleccionan `n // 3` elementos que van ser nuestro soborno para ese
+Para la generacion de set de datos, se establece un $k$ y un $n$, por cada $k$ se crea un producto y se genera un
+arreglo aleatorio de tamaño $n$, de ese arreglo se seleccionan $n // 3$ elementos que van ser nuestro soborno para ese
 producto.
 
 El resultado correcto sera el resultado donde la suma de las cantidades de los paquetes sea igual al soborno determinado
