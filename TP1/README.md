@@ -1,3 +1,4 @@
+![](https://i.imgur.com/P0aqOMI.jpg)
 # Trabajo Práctico 1
 
 ## Integrantes:
