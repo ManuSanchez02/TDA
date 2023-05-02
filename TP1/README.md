@@ -26,7 +26,7 @@ Al ser un algoritmo que hace uso del concepto de división y conquista, para cal
 
   En consecuencia, el coste no recursivo es $O(N)$ con $N$ siendo la cantidad de elementos totales. En este caso del Teorema Maestro, podemos buscar un valor para $C$ de forma que $O(N^C) = O(N)$. Resolviendo esta simple igualdad, llegamos a $C=1$.
 
-Considerando todo esto, caemos en el segundo caso del Teorema Maestro, donde $A = B^C$. En conclusion, la complejidad del algoritmo segun el Teorema Maestro es $O(N^C log(N)) = O(N*log(N)) = O(kh*log(kh))$.
+Considerando todo esto, caemos en el segundo caso del Teorema Maestro, donde $A = B^C$. En conclusion, la complejidad del algoritmo segun el Teorema Maestro es $O(N^C * log(N))$ que es igual a $O(N * log(N))$. Reemplazando $N = kh$, obtenemos $O(kh log(kh))$.
 
 ### "El algoritmo que usa heaps"
 
@@ -52,18 +52,18 @@ En nuestra implementacion, dicho algoritmo esta compuesto por:
   complejidad temporal de $O(k)$.
 - `push_next`: Esta funcion inserta el siguiente elemento del arreglo donde se encontraba la raiz del heap previa a ser
   insertada al mismo. Si este arreglo no tiene mas elementos, inserta infinito en el heap, de forma que este se hunda
-  hacia el fondo del todo. Insertar un elemento a un heap, usando `heapq.heappush` tiene una complejidad de $O(log k)$.
+  hacia el fondo del todo. Insertar un elemento a un heap, usando `heapq.heappush` tiene una complejidad de $O(log(k))$.
 - `HeapElement`: Todos los metodos de esta clase tienen una complejidad de $O(1)$.
 - `kmerge`: Esta es la funcion principal que se encarga de combinar multiples arreglos. Primero, llama
   a `initialize_heap` que tiene una complejidad $O(k)$. Luego entra en un `while` que itera mientras la longitud del
   arreglo resultado sea menor a la cantidad total de elementos, es decir, $k*h$ veces que es igual a $N$ veces. Dentro
   del `while`, se realizan 3 operaciones:
 
-  - Se extrae la raiz del heap (valor minimo) usando `heapq.heappop`, el cual tiene una complejidad de $O(log k)$.
-  - Se inserta un nuevo elemento al heap usando `push_next`, el cual tiene una complejidad de $O(log k)$.
+  - Se extrae la raiz del heap (valor minimo) usando `heapq.heappop`, el cual tiene una complejidad de $O(log(k))$.
+  - Se inserta un nuevo elemento al heap usando `push_next`, el cual tiene una complejidad de $O(log(k))$.
   - Se concatena el valor minimo al arreglo de resultado, lo cual tiene una complejidad de $O(1)$.
 
-  En total, la complejidad obtenida dentro del `while` es $O(log k)$, y repitiendolo $k*h$ veces, resulta en una
+  En total, la complejidad obtenida dentro del `while` es $O(log(k))$, y repitiendolo $k*h$ veces, resulta en una
   complejidad de $O(k h * log(k))$.
 
 ### Complejidad real de DyC
