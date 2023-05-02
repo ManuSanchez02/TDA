@@ -77,7 +77,7 @@ En estos graficos se puede apreciar como la complejidad del algoritmo de heaps a
 
 El problema con la complejidad obtenida es que segun la misma, el factor $log(kh)$ indica que la cantidad de llamados recursivos depende tanto de la cantidad de listas ($k$), como la cantidad de elementos ($h$). Sin embargo, esto esta lejos de la realidad ya que la recursividad del algoritmo solo depende de la cantidad de arreglos y no de la cantidad de elementos. El arreglo de arreglos es el que se divide a la mitad, y unicamente se considera la cantidad de arreglos en la condicion de corte, por lo que solo el valor $k$ entraria en la ecuacion para calcular la cantidad de llamados recursivos.
 
-La cantidad de elementos entra en juego unicamente en las operaciones de `merge` y `split`. El peor caso de `merge` es tener que combinar 2 arreglos con $k*h/2$ elementos cada uno. Por el otro lado, el peor caso de `split` es tener que crear 2 slices de $k*h/2$ elementos cada uno. Ambas operaciones se puede acotar asintoticamente con $O(kh)$.
+La cantidad de elementos entra en juego unicamente en las operaciones de `merge` y `split`. El peor caso de `merge` es tener que combinar 2 arreglos con $kh/2$ elementos cada uno. Por el otro lado, el peor caso de `split` es tener que crear 2 slices de $kh/2$ elementos cada uno. Ambas operaciones se puede acotar asintoticamente con $O(kh)$.
 
 Teniendo esto en cuenta, la complejidad total del algoritmo deberia ser $O(kh*log(k))$.
 
