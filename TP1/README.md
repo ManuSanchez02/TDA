@@ -155,10 +155,9 @@ Esto resulta en un algoritmo con complejidad total de $T(n, s, k) = O(k n * log(
 Por **cada producto**, construimos una matriz de $s$ columnas y $n$ filas, la iteramos y luego reconstruimos la solucion
 en base a la matriz.
 
-Construir una matriz $s_n$ cuesta $O(s _ n)$ lo mismo es iterarlo (todas las instrucciones se ejecutan en tiempo
-constante)
+Construir una matriz $s_n$ cuesta $O(s * n)$ lo mismo es iterarlo (todas las instrucciones se ejecutan en tiempo constante).
 
-Reconstruir la solucion tiene una complejidad de $O(n)$ debido al ciclo de 1 hasta $n+1$
+Reconstruir la solucion tiene una complejidad de $O(n)$ debido a que se recorre el arreglo de paquetes, buscando cuales se usaron y cuales no.
 
 El algoritmo para calcular los paquetes optimos para **un producto** resulta
 en $T(n, s) = O(s * n) + O(s * n) + O(n) = O (s * n)$
