@@ -1,10 +1,8 @@
-from utils import random_sorted_array
-from math import inf
 import heapq
+from math import inf
 
-# Details
-# heapq.heappush complexity: O(log(n))
-# heapq.heappop complexity: O(log(n))
+from utils import random_sorted_array
+
 
 class HeapElement:
     def __init__(self, arrays, array_index, element_index):
@@ -18,21 +16,19 @@ class HeapElement:
     def __gt__(self, other):
         return self.value > other
 
-# O(k)
+
 def initialize_heap(*arrays):
     heap = []
 
-    # O(k)
     for i, array in enumerate(arrays):
         if len(array) > 0:
             element = HeapElement(arrays, i, 0)
             heap.append(element)
 
-    # O(k)
     heapq.heapify(heap)
     return heap
 
-# O(log(k))
+
 def push_next(heap, arrays, array_index, element_index):
     if element_index + 1 < len(arrays[array_index]):
         new_element = HeapElement(arrays, array_index, element_index + 1)
@@ -40,21 +36,15 @@ def push_next(heap, arrays, array_index, element_index):
     else:
         heapq.heappush(heap, inf)
 
-# O(k) + O(k*h*log(k)) = O(k*h*log(k))
-# O(N*log(k))
+
 def kmerge(*arrays):
-    # O(k)
     heap = initialize_heap(*arrays)
-    
+
     res = []
 
-    # O (k*h)
     while len(res) < len(arrays) * len(arrays[0]):
-
-        # O(log k)
         min_value = heapq.heappop(heap)
 
-        # O(log k)
         push_next(heap, arrays, min_value.array_index, min_value.element_index)
         res.append(min_value.value)
     return res

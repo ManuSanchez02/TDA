@@ -1,6 +1,6 @@
 from utils import random_sorted_array
 
-# O(n)
+
 def merge(array1, array2):
     i = 0
     j = 0
@@ -23,19 +23,12 @@ def merge(array1, array2):
 
     return res
 
-# O(n)
+
 def split(array):
     half = len(array) // 2
     return array[half:], array[:half]
 
-# N = k*h
-# T(k, h) = 2T(k/2, h) + O(k*h)
-# T(N) = 2T(N/2) + O(N)
-# A = 2, B = 2, C = 1
-#
-# log_B(A) = 1 = C
-# T(N) = O(N^C * log_B(N)) = O(N * log(N))
-# T(N) = O(kh * log(kh))
+
 def kmerge(*arrays):
     if len(arrays) == 1:
         return arrays[0]
