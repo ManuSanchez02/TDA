@@ -1,9 +1,9 @@
 import random
 import unittest
 
-# from p_dinamica import sobornar
 from dinamica import sobornar_dinamico
-from utils import random_array
+from greedy import sobornar_greedy
+from utils import generar_contrabando
 
 random.seed(10)
 
@@ -13,12 +13,16 @@ class TestSoborno(unittest.TestCase):
     def assertCorrectPackages(self, solution, expected):
         for product, packages in solution.items():
             solution[product] = sum(packages)
-            expected[product] = sum(expected[product])
 
         self.assertEqual(solution, expected)
 
+    def assertCorrectPackagesOrMore(self, solution, expected):
+        for product, packages in solution.items():
+            self.assertGreaterEqual(sum(packages), expected[product])
+
     def setUp(self):
-        self.alg_soborno = sobornar_dinamico
+        self.soborno_dinamico = sobornar_dinamico
+        self.soborno_greedy = sobornar_greedy
 
         self.mercaderia_ejemplo = {
             'Cigarrillo': [8, 5],
@@ -33,11 +37,14 @@ class TestSoborno(unittest.TestCase):
         }
 
         solucion = {
-            'Cigarrillo': [8]
+            'Cigarrillo': 8
         }
 
         self.assertCorrectPackages(
-            self.alg_soborno(self.mercaderia_ejemplo, soborno), solucion)
+            self.soborno_dinamico(self.mercaderia_ejemplo, soborno), solucion)
+
+        self.assertCorrectPackagesOrMore(
+            self.soborno_greedy(self.mercaderia_ejemplo, soborno), solucion)
 
     def test_ejemplo_2_consigna(self):
         soborno = {
@@ -45,11 +52,14 @@ class TestSoborno(unittest.TestCase):
         }
 
         solucion = {
-            'Cigarrillo': [5, 8]
+            'Cigarrillo': 13
         }
 
         self.assertCorrectPackages(
-            self.alg_soborno(self.mercaderia_ejemplo, soborno), solucion)
+            self.soborno_dinamico(self.mercaderia_ejemplo, soborno), solucion)
+
+        self.assertCorrectPackagesOrMore(
+            self.soborno_greedy(self.mercaderia_ejemplo, soborno), solucion)
 
     def test_ejemplo_3_consigna(self):
         soborno = {
@@ -57,12 +67,15 @@ class TestSoborno(unittest.TestCase):
             "Vodka": 1
         }
         solucion = {
-            'Cigarrillo': [5],
-            'Vodka': [5]
+            'Cigarrillo': 5,
+            'Vodka': 5
         }
 
         self.assertCorrectPackages(
-            self.alg_soborno(self.mercaderia_ejemplo, soborno), solucion)
+            self.soborno_dinamico(self.mercaderia_ejemplo, soborno), solucion)
+
+        self.assertCorrectPackagesOrMore(
+            self.soborno_greedy(self.mercaderia_ejemplo, soborno), solucion)
 
     def test_solucion_sin_paquete_grande(self):
         mercaderia = {
@@ -74,10 +87,14 @@ class TestSoborno(unittest.TestCase):
         }
 
         solucion = {
-            "Cigarrillo": [6, 5]
+            "Cigarrillo": 11
         }
 
-        self.assertCorrectPackages(self.alg_soborno(mercaderia, soborno), solucion)
+        self.assertCorrectPackages(
+            self.soborno_dinamico(mercaderia, soborno), solucion)
+
+        self.assertCorrectPackagesOrMore(
+            self.soborno_greedy(mercaderia, soborno), solucion)
 
     def test_soborno_0(self):
         soborno = {
@@ -86,31 +103,27 @@ class TestSoborno(unittest.TestCase):
         }
 
         solucion = {
-            "Cigarrillo": [],
-            "Vodka": []
+            "Cigarrillo": 0,
+            "Vodka": 0
         }
 
         self.assertCorrectPackages(
-            self.alg_soborno(self.mercaderia_ejemplo, soborno), solucion)
+            self.soborno_dinamico(self.mercaderia_ejemplo, soborno), solucion)
+
+        self.assertCorrectPackagesOrMore(
+            self.soborno_greedy(self.mercaderia_ejemplo, soborno), solucion)
 
     def test_volume(self):
-        self.mercaderia = {}
-        self.soborno = {}
-        self.optimo = {}
-
         k = 50
         n = 100
 
-        for i in range(k):
-            producto = f"producto{i}"
-            paquetes = random_array(n)
-            self.mercaderia[producto] = paquetes
+        mercaderia, solucion, soborno = generar_contrabando(n, k)
 
-            soborno_elegido = random.sample(paquetes, k=n // 3)
-            self.soborno[producto] = sum(soborno_elegido)
-            self.optimo[producto] = soborno_elegido
+        self.assertCorrectPackages(
+            self.soborno_dinamico(mercaderia, soborno), solucion)
 
-        self.assertCorrectPackages(self.alg_soborno(self.mercaderia, self.soborno), self.optimo)
+        self.assertCorrectPackagesOrMore(
+            self.soborno_greedy(mercaderia, soborno), solucion)
 
 
 if __name__ == '__main__':

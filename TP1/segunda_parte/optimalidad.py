@@ -5,7 +5,7 @@ import random
 
 from dinamica import sobornar_dinamico
 from greedy import sobornar_greedy
-from utils import random_array
+from utils import generar_contrabando
 
 random.seed(100)
 
@@ -68,18 +68,7 @@ def generar_set_de_datos(n, k, iteraciones):
     soluciones = []
 
     for i in range(iteraciones):
-        mercaderia = {}
-        solucion = {}
-        soborno = {}
-
-        for j in range(k):
-            producto = f"producto{j}"
-            paquetes = random_array(n)
-            mercaderia[producto] = paquetes
-
-            soborno_elegido = random.sample(paquetes, k=n // 3)
-            soborno[producto] = sum(soborno_elegido)
-            solucion[producto] = soborno[producto]
+        mercaderia, soborno, solucion = generar_contrabando(n, k)
 
         mercaderias.append(mercaderia)
         sobornos.append(soborno)

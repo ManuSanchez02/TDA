@@ -138,3 +138,5 @@ producto.
 El resultado correcto sera el resultado donde la suma de las cantidades de los paquetes sea igual al soborno determinado
 para el producto, sabemos que siempre se encontrara el optimo (para el caso de la solucion con programacion dinamica)
 porque el soborno se elige del mismo arreglo.
+
+(Definido en `utils.py`)
