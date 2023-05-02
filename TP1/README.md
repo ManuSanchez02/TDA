@@ -66,16 +66,28 @@ En nuestra implementacion, dicho algoritmo esta compuesto por:
 ### Complejidad real de DyC
 
 El problema con la complejidad hallada es que no se condice con los graficos creados. La complejidad obtenida en el algoritmo de heaps es $O(k h  * log(k))$, mientras que la del algoritmo de DyC es $O(k h * log(k h))$. Es decir, la complejidad temporal del algoritmo de heaps es menor. Sin embargo, esto no se ve reflejado en los graficos.
+
 ![Grafico k constante](./graficos/k_constante.png)
 ![Grafico h constante](./graficos/h_constante.png)
 
 En estos graficos se puede apreciar como la complejidad del algoritmo de heaps aparenta ser mayor a la del algoritmo de división y conquista.
 
-El problema con la complejidad obtenida es que segun la misma, el factor $log(kh)$ indica que la cantidad de llamados recursivos depende tanto de la cantidad de listas ($k$), como la cantidad de elementos ($h$). Sin embargo, esto esta lejos de la realidad ya que la recursividad del algoritmo solo depende de la cantidad de arreglos y no de la cantidad de elementos. El arreglo de arreglos es el que se divide a la mitad, por lo que solo el valor $k$ entraria en la ecuacion para calcular la cantidad de llamados recursivos.
+El problema con la complejidad obtenida es que segun la misma, el factor $log(kh)$ indica que la cantidad de llamados recursivos depende tanto de la cantidad de listas ($k$), como la cantidad de elementos ($h$). Sin embargo, esto esta lejos de la realidad ya que la recursividad del algoritmo solo depende de la cantidad de arreglos y no de la cantidad de elementos. El arreglo de arreglos es el que se divide a la mitad, y unicamente se considera la cantidad de arreglos en la condicion de corte, por lo que solo el valor $k$ entraria en la ecuacion para calcular la cantidad de llamados recursivos.
 
-La cantidad de elementos entra en juego unicamente en la operacion de `merge`, cuyo peor caso es tener que combinar 2 arreglos con $\frac{k*h}{2}$ elementos cada uno.
+La cantidad de elementos entra en juego unicamente en las operaciones de `merge` y `split`. El peor caso de `merge` es tener que combinar 2 arreglos con $\frac{k*h}{2}$ elementos cada uno. Por el otro lado, el peor caso de `split` es tener que crear 2 slices de $\frac{k*h}{2}$ elementos cada uno. Ambas operaciones se puede acotar asintoticamente con $O(kh)$.
 
 Teniendo esto en cuenta, la complejidad total del algoritmo deberia ser $O(kh*log(k))$.
+
+La razon por la cual el Teorema Maestro dio un resultado incorrecto es porque para poder aplicarlo, se deben cumplir las siguientes condiciones:
+1. A es natural.
+2. B es real mayor a 1, y es constante (siempre el mismo).
+3. El caso base es constante.
+
+No obstante, la tercera condicion no se cumple. Esto se debe a que hay 2 casos base distintos segun la longitud del arreglo de arreglos:
++ Cuando es 1: se devuelve el unico arreglo dentro del mismo, cuya complejidad es $O(1)$.
++ Cuando es 2: se hace un `merge` entre los 2 arreglos, cuya complejidad es $O(n)$.
+
+Por esta razon, al aplicar teorema maestro, obtenemos un resultado incorrecto.
 
 ## Segunda parte: Problema del contrabando
 
