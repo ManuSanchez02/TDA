@@ -1,52 +1,26 @@
 import heapq
-from math import inf
-
 from utils import random_sorted_array
-
-
-class HeapElement:
-    def __init__(self, arrays, array_index, element_index):
-        self.value = arrays[array_index][element_index]
-        self.array_index = array_index
-        self.element_index = element_index
-
-    def __lt__(self, other):
-        return self.value < other
-
-    def __gt__(self, other):
-        return self.value > other
-
 
 def initialize_heap(*arrays):
     heap = []
+    for i in range(len(arrays)):
+        if len(arrays[i]) > 0:
+            heapq.heappush(heap, (arrays[i][0], i, 0))
 
-    for i, array in enumerate(arrays):
-        if len(array) > 0:
-            element = HeapElement(arrays, i, 0)
-            heap.append(element)
-
-    heapq.heapify(heap)
     return heap
-
 
 def push_next(heap, arrays, array_index, element_index):
     if element_index + 1 < len(arrays[array_index]):
-        new_element = HeapElement(arrays, array_index, element_index + 1)
-        heapq.heappush(heap, new_element)
-    else:
-        heapq.heappush(heap, inf)
-
+        heapq.heappush(heap, (arrays[array_index][element_index + 1], array_index, element_index + 1))
 
 def kmerge(*arrays):
     heap = initialize_heap(*arrays)
 
     res = []
-
-    while len(res) < len(arrays) * len(arrays[0]):
-        min_value = heapq.heappop(heap)
-
-        push_next(heap, arrays, min_value.array_index, min_value.element_index)
-        res.append(min_value.value)
+    while len(heap) > 0:
+        min_value, array_index, element_index = heapq.heappop(heap)
+        push_next(heap, arrays, array_index, element_index)
+        res.append(min_value)
     return res
 
 
