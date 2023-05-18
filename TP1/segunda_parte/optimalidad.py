@@ -24,15 +24,27 @@ def calcular_error(sobornar, mercaderia, solucion, soborno):
 
 
 def comparar_algoritmos(mercaderias, soluciones, sobornos):
+    errores_greedy = []
+    errores_dinamica = []
     for i in range(len(mercaderias)):
         mercaderia = mercaderias[i]
         solucion = soluciones[i]
         soborno = sobornos[i]
+        error_greedy = calcular_error(sobornar_greedy, mercaderia, solucion, soborno)
+        error_dinamica = calcular_error(sobornar_dinamico, mercaderia, solucion, soborno)
+        errores_greedy.append(error_greedy)
+        errores_dinamica.append(error_dinamica)
 
         print(f"Simulacion nro {i + 1}")
+        print(f"Error de greedy: {error_greedy}%")
+        print(f"Error de dinamica: {error_dinamica}%")
 
-        print(f"Error de greedy: {calcular_error(sobornar_greedy, mercaderia, solucion, soborno)}%")
-        print(f"Error de dinamica: {calcular_error(sobornar_dinamico, mercaderia, solucion, soborno)}%")
+    error_promedio_greedy = sum(errores_greedy) / len(errores_greedy)
+    error_promedio_dinamica = sum(errores_dinamica) / len(errores_dinamica)
+
+    print("\n----Simulacion finalizada----")
+    print(f"Promedio de error greedy: {error_promedio_greedy}%")
+    print(f"Promedio de error dinamica: {error_promedio_dinamica}%")
 
 
 def guardar_set_datos(mercaderias, sobornos, soluciones):
