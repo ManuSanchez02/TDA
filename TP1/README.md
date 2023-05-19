@@ -135,6 +135,14 @@ Luego:
 
 Este proceso se repite por cada uno de los productos dentro del soborno deseado.
 
+La ecuacion de recurrencia del algoritmo es la siguiente:
+
+![Ecuacion de recurrencia dinamico](./imagenes/ecuacion_recurrencia.png)
+
+Notar que:
++ La primera expresion solo es valida si $OPT(n-1, max(s-v_i,0)) + v_i \ge s$ y $OPT(n-1, max(s-v_i,0)) \ne -1$.
++ La segunda expresion solo es valida si $OPT(n-1, s) \ne -1$.
+
 ### Complejidad
 
 Se establecen las siguientes variables:
