@@ -84,6 +84,19 @@ La cantidad de llamados recursivos se da por cada par de arreglos. Es decir, uni
 
 Consecuentemente, la complejidad total se podria calcular como la complejidad por nivel de profunidad de recursion multiplicado por la cantidad de niveles. En otras palabras, $O(N) * O(log(k))$, lo cual es igual a $O(N * log(k))$ o $O(kh*log(k))$.
 
+Tambien podriamos llegar a la misma conclusion partiendo desde la ecuacion de recurrencia $T(N)=2\times T(N/2) + O(N)$.
+
+![Analisis de complejidad 1](imagenes/analisis_complejidad_1.png)
+
+En este punto, sabemos el trabajo que hay que hacer por llamada recursiva. Sin embargo, nos falta definir el caso base. El algoritmo propuesto tiene 2 casos base, segun la longitud del arreglo de arreglos:
+- Cuando es 1: se devuelve el unico arreglo dentro del mismo, cuya complejidad es $O(1)$.
+- Cuando es 2: se hace un `merge` entre los 2 arreglos. Por nivel, el costo de esto es $O(N)$ ya que requiere analizar los $h$ elementos de los $k$ arreglos.
+
+Como la complejidad del caso del `merge` es mayor, tomaremos esa como una cota superior. Ahora podemos expresar la complejidad como una sumatoria de costos por nivel que va desde 0 hasta la cantidad de niveles ($log(k)$) menos uno (ya que el primer nivel esta considerado por fuera de la sumatoria).
+
+![Analisis de complejidad 1](imagenes/analisis_complejidad_2.png)
+
+Resolviendo la ecuacion, nos queda la misma complejidad hallada previamente.
 
 La razon por la cual el Teorema Maestro dio un resultado incorrecto es porque para poder aplicarlo, se deben cumplir las siguientes condiciones:
 
@@ -91,10 +104,10 @@ La razon por la cual el Teorema Maestro dio un resultado incorrecto es porque pa
 2. B es real mayor a 1, y es constante (siempre el mismo).
 3. El caso base es constante.
 
-No obstante, la tercera condicion no se cumple. Esto se debe a que hay 2 casos base distintos segun la longitud del arreglo de arreglos:
+No obstante, la tercera condicion no se cumple. Esto se debe a que, como fue mencionado previamente, hay 2 casos base distintos segun la longitud del arreglo de arreglos:
 
 - Cuando es 1: se devuelve el unico arreglo dentro del mismo, cuya complejidad es $O(1)$.
-- Cuando es 2: se hace un `merge` entre los 2 arreglos, cuya complejidad es $O(n)$.
+- Cuando es 2: se hace un `merge` entre los 2 arreglos, cuya complejidad es $O(n)$, siendo $n$ la longitud de los arreglos.
 
 Por esta razon, al aplicar teorema maestro, obtenemos un resultado incorrecto.
 
