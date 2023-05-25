@@ -1,6 +1,6 @@
 # O(k n log n)
 def ordernar_mercaderia(mercaderia):
-    return dict(sorted(mercaderia.items(), key=lambda x: x[1][0], reverse=True))
+    return dict(sorted(mercaderia.items(), key=lambda x: x[1][0]))
 
 
 # Suponiendo:
@@ -17,10 +17,10 @@ def ordernar_mercaderia(mercaderia):
 
 def es_mejor_solucion(cantidad_paquete, cantidad_ultimo_paquete, cantidad_restante):
     return (
-            cantidad_ultimo_paquete > cantidad_paquete >= cantidad_restante + cantidad_ultimo_paquete)
+            cantidad_ultimo_paquete < cantidad_paquete <= cantidad_restante + cantidad_ultimo_paquete)
 
 
-def sobornar_greedy(mercaderia, soborno):
+def sobornar_greedy_min(mercaderia, soborno):
     # O(k n log n)
     mercaderia = ordernar_mercaderia(mercaderia)
     mejor_soborno = {}

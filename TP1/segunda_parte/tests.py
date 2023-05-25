@@ -3,6 +3,7 @@ import unittest
 
 from dinamica import sobornar_dinamico
 from greedy import sobornar_greedy
+from greedy_min import sobornar_greedy_min
 from utils import generar_contrabando
 
 random.seed(10)
@@ -23,6 +24,7 @@ class TestSoborno(unittest.TestCase):
     def setUp(self):
         self.soborno_dinamico = sobornar_dinamico
         self.soborno_greedy = sobornar_greedy
+        self.soborno_greedy_min = sobornar_greedy_min
 
         self.mercaderia_ejemplo = {
             'Cigarrillo': [8, 5],
@@ -46,6 +48,9 @@ class TestSoborno(unittest.TestCase):
         self.assertCorrectPackagesOrMore(
             self.soborno_greedy(self.mercaderia_ejemplo, soborno), solucion)
 
+        self.assertCorrectPackagesOrMore(
+            self.soborno_greedy_min(self.mercaderia_ejemplo, soborno), solucion)
+
     def test_ejemplo_2_consigna(self):
         soborno = {
             "Cigarrillo": 10
@@ -60,6 +65,9 @@ class TestSoborno(unittest.TestCase):
 
         self.assertCorrectPackagesOrMore(
             self.soborno_greedy(self.mercaderia_ejemplo, soborno), solucion)
+
+        self.assertCorrectPackagesOrMore(
+            self.soborno_greedy_min(self.mercaderia_ejemplo, soborno), solucion)
 
     def test_ejemplo_3_consigna(self):
         soborno = {
@@ -76,6 +84,9 @@ class TestSoborno(unittest.TestCase):
 
         self.assertCorrectPackagesOrMore(
             self.soborno_greedy(self.mercaderia_ejemplo, soborno), solucion)
+
+        self.assertCorrectPackagesOrMore(
+            self.soborno_greedy_min(self.mercaderia_ejemplo, soborno), solucion)
 
     def test_solucion_sin_paquete_grande(self):
         mercaderia = {
@@ -96,6 +107,9 @@ class TestSoborno(unittest.TestCase):
         self.assertCorrectPackagesOrMore(
             self.soborno_greedy(mercaderia, soborno), solucion)
 
+        self.assertCorrectPackagesOrMore(
+            self.soborno_greedy_min(self.mercaderia_ejemplo, soborno), solucion)
+
     def test_soborno_0(self):
         soborno = {
             "Cigarrillo": 0,
@@ -113,6 +127,9 @@ class TestSoborno(unittest.TestCase):
         self.assertCorrectPackagesOrMore(
             self.soborno_greedy(self.mercaderia_ejemplo, soborno), solucion)
 
+        self.assertCorrectPackagesOrMore(
+            self.soborno_greedy_min(self.mercaderia_ejemplo, soborno), solucion)
+
     def test_volume(self):
         k = 50
         n = 100
@@ -124,6 +141,9 @@ class TestSoborno(unittest.TestCase):
 
         self.assertCorrectPackagesOrMore(
             self.soborno_greedy(mercaderia, soborno), solucion)
+
+        self.assertCorrectPackagesOrMore(
+            self.soborno_greedy_min(mercaderia, soborno), solucion)
 
 
 if __name__ == '__main__':

@@ -5,6 +5,7 @@ import random
 
 from dinamica import sobornar_dinamico
 from greedy import sobornar_greedy
+from greedy_min import sobornar_greedy_min
 from utils import generar_contrabando
 
 random.seed(100)
@@ -24,27 +25,29 @@ def calcular_error(sobornar, mercaderia, solucion, soborno):
 
 
 def comparar_algoritmos(mercaderias, soluciones, sobornos):
-    errores_greedy = []
-    errores_dinamica = []
+    error_total_greedy = 0
+    error_total_greedy_min = 0
+    error_total_dinamica = 0
     for i in range(len(mercaderias)):
         mercaderia = mercaderias[i]
         solucion = soluciones[i]
         soborno = sobornos[i]
-        error_greedy = calcular_error(sobornar_greedy, mercaderia, solucion, soborno)
-        error_dinamica = calcular_error(sobornar_dinamico, mercaderia, solucion, soborno)
-        errores_greedy.append(error_greedy)
-        errores_dinamica.append(error_dinamica)
+        error_actual_greedy = calcular_error(sobornar_greedy, mercaderia, solucion, soborno)
+        error_actual_greedy_min = calcular_error(sobornar_greedy_min, mercaderia, solucion, soborno)
+        error_actual_dinamica = calcular_error(sobornar_dinamico, mercaderia, solucion, soborno)
+        error_total_greedy += error_actual_greedy
+        error_total_greedy_min += error_actual_greedy_min
+        error_total_dinamica += error_actual_dinamica
 
         print(f"Simulacion nro {i + 1}")
-        print(f"Error de greedy: {error_greedy}%")
-        print(f"Error de dinamica: {error_dinamica}%")
-
-    error_promedio_greedy = sum(errores_greedy) / len(errores_greedy)
-    error_promedio_dinamica = sum(errores_dinamica) / len(errores_dinamica)
+        print(f"Error de greedy: {error_actual_greedy}%")
+        print(f"Error de greedy con minimos: {error_actual_greedy_min}%")
+        print(f"Error de dinamica: {error_actual_dinamica}%")
 
     print("\n----Simulacion finalizada----")
-    print(f"Promedio de error greedy: {error_promedio_greedy}%")
-    print(f"Promedio de error dinamica: {error_promedio_dinamica}%")
+    print(f"Promedio de error greedy: {error_total_greedy / len(mercaderias)}%")
+    print(f"Promedio de error greedy con minimos: {error_total_greedy_min / len(mercaderias)}%")
+    print(f"Promedio de error dinamica: {error_total_dinamica / len(mercaderias)}%")
 
 
 def guardar_set_datos(mercaderias, sobornos, soluciones):
