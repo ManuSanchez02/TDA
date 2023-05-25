@@ -17,7 +17,7 @@ def ordernar_mercaderia(mercaderia):
 
 def es_mejor_solucion(cantidad_paquete, cantidad_ultimo_paquete, cantidad_restante):
     return (
-            cantidad_ultimo_paquete > cantidad_paquete >= cantidad_restante + cantidad_ultimo_paquete)
+            cantidad_paquete < cantidad_ultimo_paquete and cantidad_paquete >= cantidad_restante + cantidad_ultimo_paquete)
 
 
 def sobornar_greedy(mercaderia, soborno):
