@@ -93,7 +93,7 @@ En este punto, sabemos el trabajo que hay que hacer por llamada recursiva. Sin e
 - Cuando es 1: se devuelve el unico arreglo dentro del mismo, cuya complejidad es $O(1)$.
 - Cuando es 2: se hace un `merge` entre los 2 arreglos. Por nivel, el costo de esto es $O(N)$ ya que requiere analizar los $h$ elementos de los $k$ arreglos.
 
-Como la complejidad del caso del `merge` es mayor, tomaremos esa como una cota superior. Ahora podemos expresar la complejidad como una sumatoria de costos por nivel que va desde 0 hasta la cantidad de niveles ($log(k)$) menos uno (ya que el primer nivel esta considerado por fuera de la sumatoria).
+Como la complejidad del caso del `merge` es mayor, tomaremos esa como una cota superior. Ahora podemos expresar la complejidad como una sumatoria de costos por nivel que va desde 0 hasta la cantidad de niveles ( $log(k)$ ) menos uno (ya que el primer nivel esta considerado por fuera de la sumatoria).
 
 ![Analisis de complejidad 1](imagenes/analisis_complejidad_2.png)
 
