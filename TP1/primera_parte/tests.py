@@ -1,9 +1,5 @@
 import unittest
 from utils import random_sorted_array
-
-# -------------------------------
-# |    COMMENT ONE OF THESE:    |
-# -------------------------------
 from kmerge_dyc import kmerge as kmerge_dyc
 from kmerge_heap import kmerge as kmerge_heap
 
