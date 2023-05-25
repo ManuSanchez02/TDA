@@ -3,18 +3,6 @@ def ordernar_mercaderia(mercaderia):
     return dict(sorted(mercaderia.items(), key=lambda x: x[1][0]))
 
 
-# Suponiendo:
-# Cantidad maxima de paquetes: n
-# Cantidad de productos: k
-
-# 1. Tomar un producto de la mercaderia y fijarse si me alcanza para pagar todo el soborno
-#     1.1. Si me alcanza, me lo guardo como optimo local
-#     1.2. Si no me alcanza, lo agrego a la solucion
-# 2. Repetir 1 hasta que haber pagado todo el soborno
-# El algoritmo es unicamente capaz de optimizar el ultimo paquete de cada producto.
-# Si un paquete no alcanza para pagar el soborno, se agrega a la solucion y se pasa al siguiente paquete. 
-# Es decir, cuando no alcanza, siempre toma el mas grande. Esta es la parte donde falla y no es optimo.
-
 def es_mejor_solucion(cantidad_paquete, cantidad_ultimo_paquete, cantidad_restante):
     return (
             cantidad_ultimo_paquete < cantidad_paquete <= cantidad_restante + cantidad_ultimo_paquete)

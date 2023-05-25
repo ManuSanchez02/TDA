@@ -21,7 +21,7 @@ Al ser un algoritmo que hace uso del concepto de división y conquista, para cal
 - $B$ es en cuanto se divide el subproblema por cada llamado recursivo. El problema es dividido en 2 por cada llamado ya que cada uno de estos recibe una mitad del arreglo de arreglos. Por lo tanto, concluimos que $B = 2$.
 - $f(n)$ es el coste de las operaciones no recursivas. Estas operaciones son `split` y `merge`.
 
-  - `split`: Su funcion es dividir el arreglo de arreglos en 2, y retornar una tupla con cada mitad. Al estar usando python, la complejidad de hacer un slice es $O(h)$, siendo $h$ la cantidad de elementos en el arreglo de arreglos, por lo cual esa es la complejidad de este algoritmo.
+  - `split`: Su funcion es dividir el arreglo de arreglos en 2, y retornar una tupla con cada mitad. Al estar usando python, la complejidad de hacer un slice es $O(k)$, siendo $k$ la cantidad de elementos en el arreglo de arreglos, por lo cual esa es la complejidad de este algoritmo.
   - `merge`: Esta funcion se encarga de combinar 2 arreglos de numeros de forma que el orden ascendente se mantenga. Eventualmente, el algoritmo va a llegar a un punto donde va a tener 2 arreglos, cada uno con la mitad de elementos totales y tendra que combinar ambos. Este es el peor caso del algoritmo, en cuyo caso debe hacer $N$ comparaciones, siendo $N=k*h$ (con $k$ siendo la cantidad de arreglos y $h$ la cantidad de elementos por arreglo).
 
   En consecuencia, el coste no recursivo es $O(N)$ con $N$ siendo la cantidad de elementos totales. En este caso del Teorema Maestro, podemos buscar un valor para $C$ de forma que $O(N^C) = O(N)$. Resolviendo esta simple igualdad, llegamos a $C=1$.
@@ -51,8 +51,7 @@ En nuestra implementacion, dicho algoritmo esta compuesto por:
   transformarla en un _min-heap_, lo cual tiene la misma complejidad temporal, $O(k)$. Por ello, esta funcion tiene una
   complejidad temporal de $O(k)$.
 - `push_next`: Esta funcion inserta el siguiente elemento del arreglo donde se encontraba la raiz del heap previa a ser
-  insertada al mismo. Si este arreglo no tiene mas elementos, inserta infinito en el heap, de forma que este se hunda
-  hacia el fondo del todo. Insertar un elemento a un heap, usando `heapq.heappush` tiene una complejidad de $O(log(k))$.
+  insertada al mismo. Insertar un elemento a un heap, usando `heapq.heappush` tiene una complejidad de $O(log(k))$.
 - `HeapElement`: Todos los metodos de esta clase tienen una complejidad de $O(1)$.
 - `kmerge`: Esta es la funcion principal que se encarga de combinar multiples arreglos. Primero, llama
   a `initialize_heap` que tiene una complejidad $O(k)$. Luego entra en un `while` que itera mientras la longitud del
@@ -141,13 +140,14 @@ Por cada producto, creamos una matriz de soluciones, donde las filas son los paq
 
 Luego:
 
-1. Iteramos cada celda de la matriz, llenando cada una con la solucion al subproblema, para ello:
-   1. Buscamos la cantidad de productos que **minimice** la diferencia entre la cantidad y el soborno, considerando que debe ser mayor o igual al soborno. Para ello, se elige entre:
-      - No usar el paquete actual. Es decir, usar la solucion del subproblema para el mismo soborno, pero usando un paquete menos.
-      - Usar el paquete actual considerando el subproblema de tener un soborno igual al soborno actual menos el valor del mismo teniendo un paquete menos.
+1. Iteramos cada celda de la matriz, llenando cada una con la solucion al subproblema. Buscamos la cantidad de productos cuya diferencia con el soborno sea **minima**, considerando que debe ser mayor o igual a este. Para ello, se elige entre:
+   - No usar el paquete actual. Es decir, usar la solucion del subproblema para el mismo soborno, pero usando un paquete menos.
+   - Usar el paquete actual considerando el subproblema de tener un soborno igual al soborno actual menos el valor del mismo teniendo un paquete menos.
    
-   En ambos casos, verificamos si la solucion al subproblema utilizado existe o no. Si no existe ninguna solucion o si ambas soluciones a los subproblemas no alcanzan para pagar el soborno, el valor de la celda queda en $-1$, indicando que ese subproblema no se puede resolver. De otro modo, se elige la solucion mas optima (que **minimice** la diferencia entre la cantidad y el soborno).
-2. Se reconstruye la solucion a partir de la matriz generada al igual que en el problema de la mochila. Para ello se parte de la ultima posicion de la matriz y se recorre el arreglo de mercaderia de atras para adelante, verificando si este fue usado para llegar a la solucion al subproblema actual. Si lo fue, se agrega al arreglo de solucion, y si no, se pasa al siguiente paquete. Para verificar si un paquete fue usado o no, se compara la aproximacion al soborno deseado menos la cantidad de producto en el paquete actual con la solucion al subproblema de usar un paquete menos y una cantidad de soborno deseada igual a la cantidad de soborno total menos la cantidad de producto. A diferencia del problema de la mochila, lo que puede pasar es que la aproximacion sea mayor al soborno deseado. Por lo tanto, al intentar obtener "la solucion al subproblema de usar un paquete menos y una cantidad de soborno deseada igual a la cantidad de soborno total menos la cantidad de producto" hay que realizar un ajuste para no acceder a posiciones negativas de la matriz. Para ello, simplemente obtenemos el maximo entre dicha resta y 0. Es decir, si en algun momento la cantidad de producto fuera mayor al soborno deseado, para evitar compararlo con una solucion al subproblema de un soborno "negativo", se compara con la solucion al subproblema de querer un soborno de 0 productos para saber si se uso dicha solucion o no.
+  En ambos casos, verificamos si la solucion al subproblema utilizado existe o no. Si no existe ninguna solucion o si ambas soluciones a los subproblemas no alcanzan para pagar el soborno, el valor de la celda queda en $-1$, indicando que ese subproblema no se puede resolver. De otro modo, se elige la solucion mas optima (que **minimice** la diferencia entre la cantidad y el soborno).
+
+2. Se reconstruye la solucion a partir de la matriz generada al igual que en el problema de la mochila. Para ello se parte de la ultima posicion de la matriz y se recorre el arreglo de mercaderia de atras para adelante, verificando si cada paquete fue usado para llegar a la solucion al subproblema actual. Si lo fue, se agrega al arreglo de solucion, y si no, se pasa al siguiente paquete.
+   + Para verificar si un paquete fue usado o no, se compara la aproximacion al soborno deseado menos la cantidad de producto en el paquete actual con la solucion al subproblema de usar un paquete menos y una cantidad de soborno deseada igual a la cantidad de soborno total menos la cantidad de producto. A diferencia del problema de la mochila, lo que puede pasar es que la aproximacion sea mayor al soborno deseado. Por lo tanto, al intentar obtener "la solucion al subproblema de usar un paquete menos y una cantidad de soborno deseada igual a la cantidad de soborno total menos la cantidad de producto" hay que realizar un ajuste para no indexar la matriz usando valore snegativos. Para ello, simplemente obtenemos el maximo entre dicha resta y 0. Es decir, si en algun momento la cantidad de producto fuera mayor al soborno deseado, para evitar compararlo con una solucion al subproblema de un soborno "negativo", se compara con la solucion al subproblema de querer un soborno de 0 productos para saber si se uso dicha solucion o no.
 
 Este proceso se repite por cada uno de los productos dentro del soborno deseado.
 
@@ -170,8 +170,7 @@ Se establecen las siguientes variables:
 
 #### Greedy
 
-Para el algoritmo greedy, ordenamos los paquetes de mayor a menor por cada producto e iteramos los paquetes de cada
-producto.
+Para el algoritmo greedy, ordenamos los paquetes de mayor a menor por cada producto e iteramos a traves de ellos.
 
 Ordenar los paquetes de cada producto cuesta $O(n * log(n))$, resultando en que la funcion `ordernar_mercaderia`
 cueste $O(k n * log(n))$
@@ -180,7 +179,7 @@ Iterar los paquetes de todos los productos cuesta $O(k * n)$ debido a que las in
 
 Esto resulta en un algoritmo con complejidad total de $T(n, k) = O(k n * log(n)) + O(k * n) = O(k n * log(n))$
 
-Tambien se diseño el mismo algoritmo greedy, pero esta vez ordenando los paquetes de menor a mayor.
+Tambien se diseño el mismo algoritmo greedy, pero esta vez ordenando los paquetes de menor a mayor, para asi poder comparar el impacto que implica el orden en la optimalidad del algoritmo.
 
 #### Dinamica
 
