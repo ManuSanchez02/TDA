@@ -13,8 +13,9 @@ def soluciones_subproblemas(mercaderia, soborno_deseado):
         paquete = mercaderia[i - 1]
         for soborno_subproblema in range(soborno_deseado + 1):
             aproximacion_sin = soluciones[i - 1][soborno_subproblema]
-            aproximacion_con = soluciones[i - 1][max(soborno_subproblema - paquete, 0)] + paquete
-            cantidades_posibles = [aproximacion_sin, aproximacion_con]
+            solucion_subproblema_con = soluciones[i - 1][max(soborno_subproblema - paquete, 0)]
+            aproximacion_con = solucion_subproblema_con + paquete
+            cantidades_posibles = [aproximacion_sin, aproximacion_con] if solucion_subproblema_con != SIN_SOLUCION else [aproximacion_sin]
 
             if all([aprox < soborno_subproblema for aprox in cantidades_posibles]):
                 continue

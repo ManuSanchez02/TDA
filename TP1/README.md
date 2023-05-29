@@ -21,7 +21,7 @@ Al ser un algoritmo que hace uso del concepto de división y conquista, para cal
 - $B$ es en cuanto se divide el subproblema por cada llamado recursivo. El problema es dividido en 2 por cada llamado ya que cada uno de estos recibe una mitad del arreglo de arreglos. Por lo tanto, concluimos que $B = 2$.
 - $f(n)$ es el coste de las operaciones no recursivas. Estas operaciones son `split` y `merge`.
 
-  - `split`: Su funcion es dividir el arreglo de arreglos en 2, y retornar una tupla con cada mitad. Al estar usando python, la complejidad de hacer un slice es $O(h)$, siendo $h$ la cantidad de elementos en el arreglo de arreglos, por lo cual esa es la complejidad de este algoritmo.
+  - `split`: Su funcion es dividir el arreglo de arreglos en 2, y retornar una tupla con cada mitad. Al estar usando python, la complejidad de hacer un slice es $O(k)$, siendo $k$ la cantidad de elementos en el arreglo de arreglos, por lo cual esa es la complejidad de este algoritmo.
   - `merge`: Esta funcion se encarga de combinar 2 arreglos de numeros de forma que el orden ascendente se mantenga. Eventualmente, el algoritmo va a llegar a un punto donde va a tener 2 arreglos, cada uno con la mitad de elementos totales y tendra que combinar ambos. Este es el peor caso del algoritmo, en cuyo caso debe hacer $N$ comparaciones, siendo $N=k*h$ (con $k$ siendo la cantidad de arreglos y $h$ la cantidad de elementos por arreglo).
 
   En consecuencia, el coste no recursivo es $O(N)$ con $N$ siendo la cantidad de elementos totales. En este caso del Teorema Maestro, podemos buscar un valor para $C$ de forma que $O(N^C) = O(N)$. Resolviendo esta simple igualdad, llegamos a $C=1$.
@@ -51,8 +51,7 @@ En nuestra implementacion, dicho algoritmo esta compuesto por:
   transformarla en un _min-heap_, lo cual tiene la misma complejidad temporal, $O(k)$. Por ello, esta funcion tiene una
   complejidad temporal de $O(k)$.
 - `push_next`: Esta funcion inserta el siguiente elemento del arreglo donde se encontraba la raiz del heap previa a ser
-  insertada al mismo. Si este arreglo no tiene mas elementos, inserta infinito en el heap, de forma que este se hunda
-  hacia el fondo del todo. Insertar un elemento a un heap, usando `heapq.heappush` tiene una complejidad de $O(log(k))$.
+  insertada al mismo. Insertar un elemento a un heap, usando `heapq.heappush` tiene una complejidad de $O(log(k))$.
 - `HeapElement`: Todos los metodos de esta clase tienen una complejidad de $O(1)$.
 - `kmerge`: Esta es la funcion principal que se encarga de combinar multiples arreglos. Primero, llama
   a `initialize_heap` que tiene una complejidad $O(k)$. Luego entra en un `while` que itera mientras la longitud del
@@ -68,18 +67,36 @@ En nuestra implementacion, dicho algoritmo esta compuesto por:
 
 ### Complejidad real de DyC
 
-El problema con la complejidad hallada es que no se condice con los graficos creados. La complejidad obtenida en el algoritmo de heaps es $O(k h  * log(k))$, mientras que la del algoritmo de DyC es $O(k h * log(k h))$. Es decir, la complejidad temporal del algoritmo de heaps es menor. Sin embargo, esto no se ve reflejado en los graficos.
-
 ![Grafico k constante](./graficos/k_constante.png)
 ![Grafico h constante](./graficos/h_constante.png)
 
-En estos graficos se puede apreciar como la complejidad del algoritmo de heaps aparenta ser mayor a la del algoritmo de división y conquista.
+La complejidad hallada usando el teorema maestro no se condice con los graficos ya que es evidente que en el grafico de $k$ constante, ambos algoritmos poseen una forma de crecimiento casi identica. Esto es incompatible con la idea de que la complejidad del algoritmo de DyC es $O(kh * log(kh))$ ya que la complejidad del algoritmo de heaps es $O(k h * log(k))$.
 
-El problema con la complejidad obtenida es que segun la misma, el factor $log(kh)$ indica que la cantidad de llamados recursivos depende tanto de la cantidad de listas ($k$), como la cantidad de elementos ($h$). Sin embargo, esto esta lejos de la realidad ya que la recursividad del algoritmo solo depende de la cantidad de arreglos y no de la cantidad de elementos. El arreglo de arreglos es el que se divide a la mitad, y unicamente se considera la cantidad de arreglos en la condicion de corte, por lo que solo el valor $k$ entraria en la ecuacion para calcular la cantidad de llamados recursivos.
+Si mantenemos $k$ constante, la complejidad de los algoritmos (en teoria) deberia ser la siguiente:
 
-La cantidad de elementos entra en juego unicamente en las operaciones de `merge` y `split`. El peor caso de `merge` es tener que combinar 2 arreglos con $kh/2$ elementos cada uno. Por el otro lado, el peor caso de `split` es tener que crear 2 slices de $kh/2$ elementos cada uno. Ambas operaciones se puede acotar asintoticamente con $O(kh)$.
+- DyC: $O(h * log(h))$ segun el teorema maestro
+- Heaps: $O(h)$
 
-Teniendo esto en cuenta, la complejidad total del algoritmo deberia ser $O(kh*log(k))$.
+Al mantener $h$ constante, a pesar de haber una brecha en los tiempos de ejecucion, la forma de crecimiento parece ser la misma, lo que nos lleva a creer que la complejidad del algoritmo de DyC es erronea. Es altamente probable que la brecha se deba a el alto numero de llamadas recursivas resultantes de tener numerosos arreglos. Por cada llamado recursivo, hay un costo de operaciones no recursivas que resultan en un mayor tiempo de ejecucion.
+
+La cantidad de llamados recursivos se da por cada par de arreglos. Es decir, unicamente se considera $k$ para determinar la cantidad de llamados recursivos. Como consecuencia, la profundidad en nivel de las llamadas recursivas es de $O(log(k))$. Luego, por cada uno de estos niveles, se realizan operaciones no recursivas que implican analizar 1 vez cada uno de los k arreglos. Esto significa, que por cada nivel de profunidad, se realiza una operacion de costo $O(N)$.
+
+Consecuentemente, la complejidad total se podria calcular como la complejidad por nivel de profunidad de recursion multiplicado por la cantidad de niveles. En otras palabras, $O(N) * O(log(k))$, lo cual es igual a $O(N * log(k))$ o $O(kh*log(k))$.
+
+Tambien podriamos llegar a la misma conclusion partiendo desde la ecuacion de recurrencia $T(N)=2\times T(N/2) + O(N)$.
+
+![Analisis de complejidad 1](imagenes/analisis_complejidad_1.png)
+
+En este punto, sabemos el trabajo que hay que hacer por llamada recursiva. Sin embargo, nos falta definir el caso base. El algoritmo propuesto tiene 2 casos base, segun la longitud del arreglo de arreglos:
+
+- Cuando es 1: se devuelve el unico arreglo dentro del mismo, cuya complejidad es $O(1)$.
+- Cuando es 2: se hace un `merge` entre los 2 arreglos. Por nivel, el costo de esto es $O(N)$ ya que requiere analizar los $h$ elementos de los $k$ arreglos.
+
+Como la complejidad del caso del `merge` es mayor, tomaremos esa como una cota superior. Ahora podemos expresar la complejidad como una sumatoria de costos por nivel que va desde 0 hasta la cantidad de niveles ( $log(k)$ ) menos uno (ya que el primer nivel esta considerado por fuera de la sumatoria).
+
+![Analisis de complejidad 1](imagenes/analisis_complejidad_2.png)
+
+Resolviendo la ecuacion, nos queda la misma complejidad hallada previamente.
 
 La razon por la cual el Teorema Maestro dio un resultado incorrecto es porque para poder aplicarlo, se deben cumplir las siguientes condiciones:
 
@@ -87,10 +104,10 @@ La razon por la cual el Teorema Maestro dio un resultado incorrecto es porque pa
 2. B es real mayor a 1, y es constante (siempre el mismo).
 3. El caso base es constante.
 
-No obstante, la tercera condicion no se cumple. Esto se debe a que hay 2 casos base distintos segun la longitud del arreglo de arreglos:
+No obstante, la tercera condicion no se cumple. Esto se debe a que, como fue mencionado previamente, hay 2 casos base distintos segun la longitud del arreglo de arreglos:
 
 - Cuando es 1: se devuelve el unico arreglo dentro del mismo, cuya complejidad es $O(1)$.
-- Cuando es 2: se hace un `merge` entre los 2 arreglos, cuya complejidad es $O(n)$.
+- Cuando es 2: se hace un `merge` entre los 2 arreglos, cuya complejidad es $O(n)$, siendo $n$ la longitud de los arreglos.
 
 Por esta razon, al aplicar teorema maestro, obtenemos un resultado incorrecto.
 
@@ -116,18 +133,32 @@ solucion mas "voraz" siempre va a ser la que reduzca el soborno lo mas "rapido" 
 
 #### Descripcion general
 
-Analizando el problema detalladamente, nos damos cuenta que es similar al problema de la mochila (y al de subset sum), aunque a diferencia de
-la mochila, tenemos mas de una "mochila" y no tenemos la posibilidad de dejarle menos unidades de los que nos pide el
+Analizando el problema detalladamente, nos damos cuenta que es similar al problema de la mochila (y al de subset sum), aunque a diferencia de la mochila, tenemos mas de una "mochila" y no tenemos la posibilidad de dejarle menos unidades de los que nos pide el
 funcionario, tenemos que darle mas o la misma cantidad. Con estas consideraciones, diseñamos el siguiente algoritmo:
 
-1. Por cada producto:
-   1. Creamos una matriz de soluciones, donde las filas son los paquetes y las columnas son los valores del soborno
-      para cada subproblema.
-   2. Iteramos cada celda de la matriz, llenando cada una con la solucion al subproblema, para ello:
-      1. Buscamos la cantidad de productos que **minimice** la diferencia entre la cantidad y el soborno, considerando que debe ser mayor o igual al soborno.
-      2. Se elige entre el subproblema de no usar el paquete actual y el subproblema de usarlo pero considerando un
-         soborno menor y un paquete menos.
-   3. Se reconstruye la solucion a partir de la matriz generada.
+Por cada producto, creamos una matriz de soluciones, donde las filas son los paquetes y las columnas son los valores del soborno para cada subproblema. Todas las celdas son incializadas en $-1$ para indicar que no existe solucion posible (o aun no fue calculada) excepto la celda en (0,0). Esta celda representa el subproblema de cuando el soborno es 0 y yo tengo 0 paquetes, por lo tanto la solucion es 0 y ese sera el valor de la celda. Esta sera la solucion inicial que va a servir para plantear las soluciones al resto de los subproblemas.
+
+Luego:
+
+1. Iteramos cada celda de la matriz, llenando cada una con la solucion al subproblema. Buscamos la cantidad de productos cuya diferencia con el soborno sea **minima**, considerando que debe ser mayor o igual a este. Para ello, se elige entre:
+   - No usar el paquete actual. Es decir, usar la solucion del subproblema para el mismo soborno, pero usando un paquete menos.
+   - Usar el paquete actual considerando el subproblema de tener un soborno igual al soborno actual menos el valor del mismo teniendo un paquete menos.
+   
+  En ambos casos, verificamos si la solucion al subproblema utilizado existe o no. Si no existe ninguna solucion o si ambas soluciones a los subproblemas no alcanzan para pagar el soborno, el valor de la celda queda en $-1$, indicando que ese subproblema no se puede resolver. De otro modo, se elige la solucion mas optima (que **minimice** la diferencia entre la cantidad y el soborno).
+
+2. Se reconstruye la solucion a partir de la matriz generada al igual que en el problema de la mochila. Para ello se parte de la ultima posicion de la matriz y se recorre el arreglo de mercaderia de atras para adelante, verificando si cada paquete fue usado para llegar a la solucion al subproblema actual. Si lo fue, se agrega al arreglo de solucion, y si no, se pasa al siguiente paquete.
+   + Para verificar si un paquete fue usado o no, se compara la aproximacion al soborno deseado menos la cantidad de producto en el paquete actual con la solucion al subproblema de usar un paquete menos y una cantidad de soborno deseada igual a la cantidad de soborno total menos la cantidad de producto. A diferencia del problema de la mochila, lo que puede pasar es que la aproximacion sea mayor al soborno deseado. Por lo tanto, al intentar obtener "la solucion al subproblema de usar un paquete menos y una cantidad de soborno deseada igual a la cantidad de soborno total menos la cantidad de producto" hay que realizar un ajuste para no indexar la matriz usando valore snegativos. Para ello, simplemente obtenemos el maximo entre dicha resta y 0. Es decir, si en algun momento la cantidad de producto fuera mayor al soborno deseado, para evitar compararlo con una solucion al subproblema de un soborno "negativo", se compara con la solucion al subproblema de querer un soborno de 0 productos para saber si se uso dicha solucion o no.
+
+Este proceso se repite por cada uno de los productos dentro del soborno deseado.
+
+La ecuacion de recurrencia del algoritmo es la siguiente:
+
+![Ecuacion de recurrencia dinamico](./imagenes/ecuacion_recurrencia.png)
+
+Notar que:
+
+- La primera expresion solo es valida si $OPT(n-1, max(s-v_i,0)) + v_i \ge s$ y $OPT(n-1, max(s-v_i,0)) \ne -1$.
+- La segunda expresion solo es valida si $OPT(n-1, s) \ne -1$.
 
 ### Complejidad
 
@@ -139,41 +170,47 @@ Se establecen las siguientes variables:
 
 #### Greedy
 
-Para el algoritmo greedy, ordenamos los paquetes de mayor a menor por cada producto e iteramos los paquetes de cada
-producto.
+Para el algoritmo greedy, ordenamos los paquetes de mayor a menor por cada producto e iteramos a traves de ellos.
 
 Ordenar los paquetes de cada producto cuesta $O(n * log(n))$, resultando en que la funcion `ordernar_mercaderia`
 cueste $O(k n * log(n))$
 
-Iterar los paquetes de cada producto cuesta $O(k * n)$ debido a que las instrucciones ejecutadas en el ciclo se hacen en
-tiempo constante
+Iterar los paquetes de todos los productos cuesta $O(k * n)$ debido a que las instrucciones ejecutadas en el ciclo se hacen en tiempo constante.
 
-Esto resulta en un algoritmo con complejidad total de $T(n, s, k) = O(k n * log(n)) + O(k * n) = O(k n * log(n))$
+Esto resulta en un algoritmo con complejidad total de $T(n, k) = O(k n * log(n)) + O(k * n) = O(k n * log(n))$
+
+Tambien se diseño el mismo algoritmo greedy, pero esta vez ordenando los paquetes de menor a mayor, para asi poder comparar el impacto que implica el orden en la optimalidad del algoritmo.
 
 #### Dinamica
 
-Por **cada producto**, construimos una matriz de $s$ columnas y $n$ filas, la iteramos y luego reconstruimos la solucion
-en base a la matriz.
+Por **cada producto**, construimos una matriz de $s$ columnas y $n$ filas, la iteramos y luego reconstruimos la solucion en base a la matriz.
 
-Construir una matriz $s_n$ cuesta $O(s * n)$ lo mismo es iterarlo (todas las instrucciones se ejecutan en tiempo constante).
+Construir una matriz $s\times{n}$ cuesta $O(s * n)$, al igual que iterarla (todas las instrucciones se ejecutan en tiempo constante).
 
 Reconstruir la solucion tiene una complejidad de $O(n)$ debido a que se recorre el arreglo de paquetes, buscando cuales se usaron y cuales no.
 
-El algoritmo para calcular los paquetes optimos para **un producto** resulta
-en $T(n, s) = O(s * n) + O(s * n) + O(n) = O (s * n)$
+El algoritmo para calcular los paquetes optimos para **un producto** resulta en $T(n, s) = O(s * n) + O(s * n) + O(n) = O (s * n)$.
 
-Esto resulta en un algoritmo con complejidad total de $T(n, s, k) = O(k * s * n)$
+Esto resulta en un algoritmo con complejidad total de $T(n, s, k) = O(k * s * n)$, debido a que es polinomial respecto al valor numerico de los sobornos, la complejidad resultante es pseudopolinomial.
 
 ### Deficiencias de algoritmo greedy
 
 Como se menciono anteriormente, al solo ser capaz de optimizar el **ultimo** paquete, en casos donde la solucion
 optima **no** tiene en cuenta el paquete de mayor siempre va a fallar el algoritmo greedy
 
+```
 Ejemplo:
 
-Cuando tengo los siguientes paquetes `[8, 6, 5]` y se pide un soborno de 11 unidades, nuestro algoritmo
-devolvera `[8, 5]`
-porque siempre se tiene en cuenta el mas grande
+Cuando tengo los siguientes paquetes `[8, 6, 5]` y se pide un soborno de 11 unidades, nuestro algoritmo devolvera `[8, 5]` porque siempre se tiene en cuenta el mas grande
+```
+
+Para el algoritmo greedy de minimos, para los casos donde el paquete mayor pertenezca a la solucion optima, se va a alejar mucho del optimo. Esto es debido a que los paquetes mas pequeños se van a acercar mucho al soborno pedido, pero si no llegan, se utilizan paquetes con mayor cantidad y terminamos pagando mucho mas de lo pedido
+
+```
+Ejemplo:
+
+Suponiendo los paquetes [5, 6, 8] y se pide un soborno de 12 unidades, el algortimo greedy por minimos eligiria los 3 paquetes
+```
 
 ### Generacion de set de datos
 
