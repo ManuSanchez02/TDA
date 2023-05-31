@@ -1,13 +1,51 @@
 import sys
 import time
+from math import inf
+import copy
 
 BT_FLAG = 'E'
 APROX_FLAG = 'A'
 GREEDY_FLAG = 'A2'
 
+def empaquetar_bt_con_paquetes(objetos: list, solucion_parcial: list = []) -> list:
+    solucion = None
+    if len(objetos) == 0: return solucion_parcial
 
-def empaquetar_bt(objetos: list, n: int = 1):
-    solucion = [1]
+    objeto = objetos.pop()
+    for paquete in solucion_parcial:
+        if sum(paquete) + objeto <= 1:
+            paquete.append(objeto)
+            solucion_actual = empaquetar_bt(objetos, solucion_parcial)
+            if not solucion or len(solucion_actual) < len(solucion):
+                solucion = copy.deepcopy(solucion_actual)
+            paquete.pop()
+
+    solucion_parcial.append([objeto])
+    solucion_actual = empaquetar_bt(objetos, solucion_parcial)
+    if not solucion or len(solucion_actual) < len(solucion):
+        solucion = copy.deepcopy(solucion_actual)
+    solucion_parcial.pop()
+    objetos.append(objeto)
+
+    return solucion
+
+def empaquetar_bt(objetos: list, solucion_parcial: list = []) -> int:
+    solucion = inf
+    if len(objetos) == 0: return len(solucion_parcial)
+
+    objeto = objetos.pop()
+    for paquete in solucion_parcial:
+        if  sum(paquete) + objeto <= 1:
+            paquete.append(objeto)
+            solucion_actual = empaquetar_bt(objetos, solucion_parcial)
+            solucion = min(solucion_actual, solucion)
+            paquete.pop()
+
+    solucion_parcial.append([objeto])
+    solucion_actual = empaquetar_bt(objetos, solucion_parcial)
+    solucion = min(solucion_actual, solucion)
+    solucion_parcial.pop()
+    objetos.append(objeto)
 
     return solucion
 
@@ -54,8 +92,8 @@ def main():
 
 
 if __name__ == '__main__':
-    objetos = [0.4, 0.2, 0.5, 0.3, 0.7, 0.6, 0.1, 0.4, 0.2, 0.2]
+    objetos = [0.4, 0.8, 0.5, 0.1, 0.7, 0.6, 0.1, 0.4, 0.2, 0.2]
     solucion = empaquetar_bt(objetos)
 
-    main()
+    # main()
     print(solucion)
