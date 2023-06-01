@@ -7,6 +7,9 @@ BT_FLAG = 'E'
 APROX_FLAG = 'A'
 GREEDY_FLAG = 'A2'
 
+def solucion_valida(suma_solucion: int) -> bool:
+    return suma_solucion <= 1 or isclose(suma_solucion, 1)
+
 def empaquetar_bt_con_paquetes(objetos: list, solucion_parcial: list = []) -> list:
     solucion = None
     if len(objetos) == 0: return solucion_parcial
@@ -36,7 +39,7 @@ def empaquetar_bt(objetos: list, solucion_parcial: list = [], mejor_solucion: in
 
     objeto = objetos.pop()
     for paquete in solucion_parcial:
-        if  paquete[1] + objeto <= 1 or isclose(paquete[1] + objeto, 1):
+        if  solucion_valida(paquete[1] + objeto):
             paquete[0].append(objeto)
             paquete[1] += objeto
             solucion_actual = empaquetar_bt(objetos, solucion_parcial, mejor_solucion)
@@ -58,15 +61,23 @@ def empaquetar_bt(objetos: list, solucion_parcial: list = [], mejor_solucion: in
 
 
 def empaquetar_aprox(objetos: list, n: int = 1):
-    solucion = [2, 3]
+    paquetes = []
+    paquete_actual = []
+    for objeto in objetos:
+        if solucion_valida(sum(paquete_actual) + objeto):
+            paquete_actual.append(objeto)
+        else:
+            paquetes.append(paquete_actual)
+            paquete_actual = [objeto]
 
-    return solucion
+    return len(paquetes)
+
 
 
 def empaquetar_greedy(objetos: list, n: int = 1):
-    solucion = [5, 6, 7]
+    solucion = []
 
-    return solucion
+    return len(solucion)
 
 
 empaquetar_dict = {
