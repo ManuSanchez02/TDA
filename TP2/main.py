@@ -1,6 +1,6 @@
 import sys
 import time
-from math import inf
+from math import inf, isclose
 import copy
 
 BT_FLAG = 'E'
@@ -29,25 +29,32 @@ def empaquetar_bt_con_paquetes(objetos: list, solucion_parcial: list = []) -> li
 
     return solucion
 
-def empaquetar_bt(objetos: list, solucion_parcial: list = []) -> int:
-    solucion = inf
-    if len(objetos) == 0: return len(solucion_parcial)
+def empaquetar_bt(objetos: list, solucion_parcial: list = [], mejor_solucion: int = inf) -> int:
+    if len(objetos) == 0: 
+        return len(solucion_parcial)
+
 
     objeto = objetos.pop()
     for paquete in solucion_parcial:
-        if  sum(paquete) + objeto <= 1:
-            paquete.append(objeto)
-            solucion_actual = empaquetar_bt(objetos, solucion_parcial)
-            solucion = min(solucion_actual, solucion)
-            paquete.pop()
+        if  paquete[1] + objeto <= 1 or isclose(paquete[1] + objeto, 1):
+            paquete[0].append(objeto)
+            paquete[1] += objeto
+            solucion_actual = empaquetar_bt(objetos, solucion_parcial, mejor_solucion)
+            mejor_solucion = min(solucion_actual, mejor_solucion)
+            paquete[1] -= objeto
+            paquete[0].pop()
 
-    solucion_parcial.append([objeto])
-    solucion_actual = empaquetar_bt(objetos, solucion_parcial)
-    solucion = min(solucion_actual, solucion)
+    if len(solucion_parcial) + 1 >= mejor_solucion: 
+        objetos.append(objeto)
+        return mejor_solucion
+
+    solucion_parcial.append([[objeto], objeto])
+    solucion_actual = empaquetar_bt(objetos, solucion_parcial, mejor_solucion)
+    mejor_solucion = min(solucion_actual, mejor_solucion)
     solucion_parcial.pop()
     objetos.append(objeto)
 
-    return solucion
+    return mejor_solucion
 
 
 def empaquetar_aprox(objetos: list, n: int = 1):
@@ -79,15 +86,15 @@ def main():
 
     flags = flags.split('|')
 
-    paquetes = []
+    objetos = []
     with open(ruta_datos) as archivo:
-        paquetes.extend([float(linea.rstrip()) for linea in archivo.readlines()[2:]])
+        objetos.extend([float(linea.rstrip()) for linea in archivo.readlines()[2:]])
 
     start_time = time.time()
-    cant_paq_x_met = [str(len(empaquetar_dict[flag](paquetes))) for flag in flags]
+    paquetes_por_metodo = [str(empaquetar_dict[flag](objetos)) for flag in flags]
     end_time = time.time()
 
-    print(f"{'|'.join(cant_paq_x_met)}: #Envases")
+    print(f"{'|'.join(paquetes_por_metodo)}: #Envases")
     print(f"Tiempo de ejecucion: {(end_time - start_time) * 1000}")
 
 
@@ -95,5 +102,5 @@ if __name__ == '__main__':
     objetos = [0.4, 0.8, 0.5, 0.1, 0.7, 0.6, 0.1, 0.4, 0.2, 0.2]
     solucion = empaquetar_bt(objetos)
 
-    # main()
+    main()
     print(solucion)
