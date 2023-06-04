@@ -1,12 +1,9 @@
 from empaquetar_aprox import empaquetar_aprox
 from empaquetar_bt import empaquetar_bt
-from random import uniform
+from utils import generar_objetos
 
 OBJETOS_POR_SIMULACION = 15
 SIMULACIONES = 1000
-
-def generar_objetos(n):
-    return [round(uniform(0, 1), 3) for _ in range(n)]
 
 def error_relativo(solucion_optima, solucion_aproximada):
     return abs(solucion_aproximada - solucion_optima) / solucion_optima * 100
