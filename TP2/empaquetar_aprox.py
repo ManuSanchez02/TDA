@@ -11,5 +11,7 @@ def empaquetar_aprox(objetos: list):
             paquetes.append(paquete_actual)
             paquete_actual = [objeto]
 
+    paquetes.append(paquete_actual)
+
     return paquetes
 
