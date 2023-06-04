@@ -1,7 +1,7 @@
 from utils import solucion_valida
 
 
-def empaquetar_aprox(objetos: list, n: int = 1):
+def empaquetar_aprox(objetos: list):
     paquetes = []
     paquete_actual = []
     for objeto in objetos:
@@ -11,4 +11,5 @@ def empaquetar_aprox(objetos: list, n: int = 1):
             paquetes.append(paquete_actual)
             paquete_actual = [objeto]
 
-    return len(paquetes)
+    return paquetes
+

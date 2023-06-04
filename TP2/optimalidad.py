@@ -2,6 +2,9 @@ from empaquetar_aprox import empaquetar_aprox
 from empaquetar_bt import empaquetar_bt
 from random import uniform
 
+OBJETOS_POR_SIMULACION = 15
+SIMULACIONES = 1000
+
 def generar_objetos(n):
     return [round(uniform(0, 1), 3) for _ in range(n)]
 
@@ -12,14 +15,14 @@ def main():
     soluciones_optimas = []
     soluciones_aproximadas = []
     error_relativo_total = 0
-    for i in range(500):
+    for i in range(SIMULACIONES):
         print("Simulacion", i + 1)
-        objetos = generar_objetos(15)
+        objetos = generar_objetos(OBJETOS_POR_SIMULACION)
 
-        soluciones_aproximadas.append(empaquetar_aprox(objetos))
+        soluciones_aproximadas.append(len(empaquetar_aprox(objetos)))
         print(f"Solucion aproximada: {soluciones_aproximadas[-1]}")
 
-        soluciones_optimas.append(empaquetar_bt(objetos))
+        soluciones_optimas.append(len(empaquetar_bt(objetos)))
         print(f"Solucion optima: {soluciones_optimas[-1]}")
 
         error_relativo_total += error_relativo(soluciones_optimas[-1], soluciones_aproximadas[-1])
