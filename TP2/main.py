@@ -2,7 +2,7 @@ import sys
 import time
 from empaquetar_aprox import empaquetar_aprox
 from empaquetar_bt import empaquetar_bt
-from empaquetar_greedy import empaquetar_greedy
+from empaquetar_aprox_2 import empaquetar_aprox_2
 
 BT_FLAG = 'E'
 APROX_FLAG = 'A'
@@ -11,7 +11,7 @@ GREEDY_FLAG = 'A2'
 empaquetar_dict = {
     BT_FLAG: empaquetar_bt,
     APROX_FLAG: empaquetar_aprox,
-    GREEDY_FLAG: empaquetar_greedy
+    GREEDY_FLAG: empaquetar_aprox_2
 }
 
 
@@ -39,3 +39,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+    
