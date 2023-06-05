@@ -168,7 +168,7 @@ Para nuestro algoritmo aproximado 2, se hacen los siguientes pasos:
 
 La complejidad temporal de este algoritmo es $O(n^2)$. Esto se debe a que el peor caso posible es aquel en el que cada objeto ocupa un paquete entero. Por lo tanto, cada objeto al ser insertado debe pasar por cada paquete probando si entra o no. Al tener $n$ paquetes y $n$ objetos, la complejidad final es $O(n^2)$.
 
-Debido a que la complejidad de la insercion de los objetos en los paquetes es mayor a la complejidad de ordenar los paquetes de mayor a menor (la cual es $O(n log n)$), esta no afecta a la notacion Big-O del algoritmo.
+Debido a que la complejidad de la insercion de los objetos en los paquetes es mayor a la complejidad de ordenar los paquetes de mayor a menor (la cual es $O(n log n)$ ), esta no afecta a la notacion Big-O del algoritmo.
 
 ### Comparaciones de optimalidad
 
