@@ -120,15 +120,19 @@ A raiz del ultimo punto, deducimos que la suma de los objetos de todos los paque
 $$
 P_1 + P_2 > 1
 $$
+
 $$
 P_3 + P_4 > 1
 $$
+
 $$
 P_5 + P_6 > 1
 $$
+
 $$
 \vdots
 $$
+
 $$
 P_{A(I)-1} + P_{A(I)} > 1
 $$
