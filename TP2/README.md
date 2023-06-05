@@ -90,7 +90,7 @@ Cada elemento puede ir en $n$ paquetes distintos. Al tener $n$ objetos, la canti
 
 ### Algoritmo aproximado
 #### Complejidad temporal
-La complejidad temporal del algoritmo aproximado es $O(N)$ debido a que se iteran todos los objetos y se ejecutan instrucciones $O(1)$ dentro del ciclo.
+La complejidad temporal del algoritmo aproximado de la catedra es $O(N)$. Esto se debe a que hay un unico ciclo `for` que recorre la lista de objetos. Si un objeto no entra en el paquete actual, se cierra el paquete y se agrega a la lista de paquetes, luego se crea un paquete nuevo e inserta el objeto alli. Gracias a esta simple logica, el algoritmo solo recorre la lista de paquetes una vez, resultando en la complejidad mencionada.
 
 #### Analisis de aproximacion
 Para calcular la cota $r(A)$ para nuestro algoritmo de aproximacion, se consideraran los siguientes puntos:
