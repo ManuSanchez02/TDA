@@ -115,17 +115,21 @@ $$
 P_i + P_{i+1} > 1
 $$
 
-A raiz del ultimo punto, deducimos que la suma de los objetos de todos los paquetes es mayor a $\frac{A(I)}{2}$.
+A raiz del ultimo punto, deducimos que la suma de los objetos de todos los paquetes es mayor a $\frac{A(I)}{2}$. Esto se deduce gracias a que:
 
 $$
 P_1 + P_2 > 1
-\\
+$$
+$$
 P_3 + P_4 > 1
-\\
+$$
+$$
 P_5 + P_6 > 1
-\\
+$$
+$$
 \vdots
-\\
+$$
+$$
 P_{A(I)-1} + P_{A(I)} > 1
 $$
 
