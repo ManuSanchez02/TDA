@@ -22,49 +22,82 @@ Dado un problema $X$:
 - Una solucion al problema $X$ se puede verificar en tiempo polinomial.
 - Otro problema $Y$ NP-Completo se puede reducir al problema $X$, de forma que $X \ge_p Y$. Es decir, resolver $X$ es al menos tan dificil como resolver $Y$.
 
-Analicemos si una solucion a nuestro problema se puede verificar en tiempo polinomial. Como entrada, esperamos recibir una lista de paquetes, y un valor $k$ que representa la cantidad de paquetes. Para saber si una solucion es valida, lo primero que verificamos es que la suma de objetos de cada paquete no supere 1. Una vez verificado esto, nos fijamos si la cantidad de paquetes es menor o igual a $k$. En codigo seria asi:
+Analicemos si una solucion a nuestro problema se puede verificar en tiempo polinomial. Como entrada, esperamos recibir una lista de objetos, una solucion, y un valor $k$ que representa la cantidad de paquetes. Para saber si una solucion es valida, lo primero que verificamos es que la suma de objetos de cada paquete en la solucion no supere 1. A la vez, nos fijamos que todos los objetos de la lista de objetos original hayan sido empaquetados en la solucion. Si falta alguno o si hay algun objeto de mas en un paquete (que no pertenezca a los objetos originales), la solucion sera invalida. Una vez verificado esto, nos fijamos si la cantidad de paquetes es menor o igual a $k$. En codigo seria asi:
 
 ```py
-for paquete in paquetes:
-  if sum(paquete) > 1:
-    return False
+def verificar_solucion(objetos, solucion, k):
+  for paquete in solucion:
+    if sum(paquete) > 1:
+      return False
 
-return len(paquetes) <= k
+    for objeto in paquete:
+      try:
+        objetos.remove(objeto)
+      except:
+        return False
+
+  return (len(paquetes) <= k) and len(objetos) == 0
 ```
 
 Todas estas operaciones se pueden hacer en tiempo polinomial. Consecuentemente, se cumple la primera condicion de un problema NP-Completo.
 
-Por otro lado, proponemos reducir el problema de Subset Sum al problema de empaquetamiento. Este problema trata sobre, dado un set de numeros $S$ y un numero objetivo $n$, buscar si existe un subset de $S$ cuyos objetos sumen exactamente $n$. Por ejemplo:
+Por otro lado, proponemos reducir el *Partition Problem* al problema de empaquetamiento. Este problema trata sobre, dado un set de numeros $S$, buscar si existe una particion de 2 subsets de $S$ tal que los elementos de los subsets sumen lo mismo. Por ejemplo:
 
 ```txt
 S = [1, 8, 16, 4, 10, 9]
-n = 15
+S1 = [8, 16] --> Suma: 24
+S2 = [1, 4, 10, 9] --> Suma: 24
 ```
 
-Para poder reducir esto al problema de empaquetamiento, lo primero que hay que hacer es filtrar a todos aquellos numeros que sean mayores que $n$. En nuestro caso:
+Debido a que el problema de empaquetamiento solo trabaja con numeros del 0 al 1, dividir todos los elementos del set $S$ por $\frac{n}{2}$ siendo $n$ la suma de los elementos del set $S$. De esta forma, obtenemos el set $S'$ cuya suma de los elementos sera igual a 2. Esto significa que si fueramos a empaquetar estos elementos, el mejor empaquetamiento posible seria usar 2 paquetes. En nuestro caso:
 
 ```txt
-[1, 8, 16, 4, 10, 9] --> [1, 8, 4, 10, 9]
+n/2 = 48/2 = 24
+S = [1, 8, 16, 4, 10, 9] --> [1/24, 8/24, 16/24, 4/24, 10/24, 9/24]
 ```
 
-Debido a que el problema de empaquetamiento solo trabaja con numeros del 0 al 1, dividimos todos los numeros restantes por $n$.
+Ahora si, aplicamos el algoritmo de empaquetamiento. Si el algoritmo logra obtener una solucion en la que unicamente se usen 2 paquetes, entonces podemos afirmar que el *Partition Problem* tiene solucion. Incluso podemos obtener cual es dicha solucion. Si recordamos, habiamos dividido los elementos por $\frac{n}{2}$ por lo que habria que volver a transformarlos al problema original. Para ello, los multiplicamos por $\frac{n}{2}$. De esta forma, tendremos los subsets $S_1$ y $S_2$, los cuales tendran una suma de elementos igual, cuyo valor sera $n/2$.
 
 ```txt
-n = 15
-[1, 8, 4, 10, 9] --> [1/15, 8/15, 4/15, 10/15, 9/15] --> [0.067, 0.533, 0.267, 0.667, 0.6]
-```
+S = [1/24, 8/24, 16/24, 4/24, 10/24, 9/24]
+S1 = [8/24, 16/24] --> Suma: 1
+S2 = [1/24, 4/24, 10/24, 9/24] --> Suma: 1
 
-Luego, aplicamos el algoritmo de empaquetamiento. Si conseguimos una solucion en la que un paquete este completo (que sus objetos sumen exactamente 1), entonces significa que efectivamente existe un subset de $S$ tal que sus objetos sumen $n$.
+Convirtiendolos al problema original:
+S1 = [8, 16] --> Suma: 24
+S2 = [1, 4, 10, 9] --> Suma: 24
+```
 
 Ejemplo del algoritmo de reduccion
 
 ```py
-def reducir_a_objetos(set, n):
-  nuevo = []
-  for elem in set:
-    if elem > n: continue
-    nuevo.push(elem / n)
-  return nuevo
+def reducir_a_empaquetamiento(set_partition):
+  n = sum(set_partition)
+  objetos_empaquetamiento = []
+
+  for elem in set_partition:
+    objetos_empaquetamiento.push(elem / (n / 2))
+
+  return objetos_empaquetamiento
+
+def partition_problem(set_partition):
+  n = sum(set_partition)
+  objetos_empaquetamiento = reducir_a_empaquetamiento(set_partition)
+  solucion_empaquetamiento = empaquetar(objetos_empaquetamiento)
+  solucion_partition = []
+
+  if (len(solucion_empaquetamiento) > 2):
+    return False
+
+  for paquete in solucion_empaquetamiento:
+    subset = []
+
+    for elem in paquete:
+      subset.push(elem * n / 2)
+
+    solucion_partition.push(subset)
+
+  return solucion_partition
 ```
 
 #### Complejidad temporal
@@ -109,7 +142,7 @@ Para calcular la cota $r(A)$ para nuestro algoritmo de aproximacion, se consider
 - $A(I)$ es la cantidad de paquetes generados por nuestro algoritmo de aproximacion
 - $z(I)$ es la cantidad de paquetes generados por nuestro algoritmo optimo
 
-La suma de los objetos de 2 paquetes adyacentes es superior a 1. Esto es debido a que si se creo un paquete nuevo, necesariamente el primer objeto del nuevo paquete no entraba en el paquete anterior. Sea $P_i$ la suma de los elementos del paqute $i$, tenemos que:
+La suma de los objetos de 2 paquetes adyacentes es superior a 1. Esto es debido a que si se creo un paquete nuevo, necesariamente el primer objeto del nuevo paquete no entraba en el paquete anterior. Sea $P_i$ la suma de los elementos del paqute $i$, tenemos que, y considerando que la cantidad de paquetes es par:
 
 $$
 P_i + P_{i+1} > 1
@@ -159,6 +192,46 @@ Por lo tanto:
 
 $$
 z(I) \ge \frac{A(I)}{2} \Rightarrow \frac{A(I)}{z(I)} \le 2 = r(A)
+$$
+
+Por el otro lado, si tenemos una cantidad impar de paquetes, vemos que:
+
+$$
+P_1 + P_2 > 1
+$$
+
+$$
+P_3 + P_4 > 1
+$$
+
+$$
+P_5 + P_6 > 1
+$$
+
+$$
+\vdots
+$$
+
+$$
+P_{A(I)-2} + P_{A(I)-1} > 1
+$$
+
+Si lo expresamos como una sumatoria y agregamos el ultimo paquete:
+
+$$
+(\sum_{i=1}^{A(I)-1} P_i) + P_{A(I)} > \frac{A(I)-1}{2} + P_{A(I)}
+$$
+
+Por el mismo motivo descrito anteriormente, el mejor empaquetamiento posible es aquel en el que todos los paquetes estan llenos. Por lo tanto:
+
+$$
+z(I) \ge \sum_{i=1}^{n} a_i = (\sum_{i=1}^{A(I)-1} P_i) + P_{A(I)}
+$$
+
+Nuevamente, llegamos a lo siguiente:
+
+$$
+z(I) \ge \frac{A(I)-1}{2} \Rightarrow \frac{A(I)-1}{z(I)} \le 2 = r(A)
 $$
 
 En conclusion, el algoritmo provisto es una 2-aproximacion de la solucion optima.
