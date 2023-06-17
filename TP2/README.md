@@ -22,14 +22,21 @@ Dado un problema $X$:
 - Una solucion al problema $X$ se puede verificar en tiempo polinomial.
 - Otro problema $Y$ NP-Completo se puede reducir al problema $X$, de forma que $X \ge_p Y$. Es decir, resolver $X$ es al menos tan dificil como resolver $Y$.
 
-Analicemos si una solucion a nuestro problema se puede verificar en tiempo polinomial. Como entrada, esperamos recibir una lista de paquetes, y un valor $k$ que representa la cantidad de paquetes. Para saber si una solucion es valida, lo primero que verificamos es que la suma de objetos de cada paquete no supere 1. Una vez verificado esto, nos fijamos si la cantidad de paquetes es menor o igual a $k$. En codigo seria asi:
+Analicemos si una solucion a nuestro problema se puede verificar en tiempo polinomial. Como entrada, esperamos recibir una lista de objetos, una solucion, y un valor $k$ que representa la cantidad de paquetes. Para saber si una solucion es valida, lo primero que verificamos es que la suma de objetos de cada paquete en la solucion no supere 1. A la vez, nos fijamos que todos los objetos de la lista de objetos original hayan sido empaquetados en la solucion. Si falta alguno o si hay algun objeto de mas en un paquete (que no pertenezca a los objetos originales), la solucion sera invalida. Una vez verificado esto, nos fijamos si la cantidad de paquetes es menor o igual a $k$. En codigo seria asi:
 
 ```py
-for paquete in paquetes:
-  if sum(paquete) > 1:
-    return False
+def verificar_solucion(objetos, solucion, k):
+  for paquete in solucion:
+    if sum(paquete) > 1:
+      return False
 
-return len(paquetes) <= k
+    for objeto in paquete:
+      try:
+        objetos.remove(objeto)
+      except:
+        return False
+
+  return (len(paquetes) <= k) and len(objetos) == 0
 ```
 
 Todas estas operaciones se pueden hacer en tiempo polinomial. Consecuentemente, se cumple la primera condicion de un problema NP-Completo.
@@ -109,7 +116,7 @@ Para calcular la cota $r(A)$ para nuestro algoritmo de aproximacion, se consider
 - $A(I)$ es la cantidad de paquetes generados por nuestro algoritmo de aproximacion
 - $z(I)$ es la cantidad de paquetes generados por nuestro algoritmo optimo
 
-La suma de los objetos de 2 paquetes adyacentes es superior a 1. Esto es debido a que si se creo un paquete nuevo, necesariamente el primer objeto del nuevo paquete no entraba en el paquete anterior. Sea $P_i$ la suma de los elementos del paqute $i$, tenemos que:
+La suma de los objetos de 2 paquetes adyacentes es superior a 1. Esto es debido a que si se creo un paquete nuevo, necesariamente el primer objeto del nuevo paquete no entraba en el paquete anterior. Sea $P_i$ la suma de los elementos del paqute $i$, tenemos que, y considerando que la cantidad de paquetes es par:
 
 $$
 P_i + P_{i+1} > 1
@@ -159,6 +166,46 @@ Por lo tanto:
 
 $$
 z(I) \ge \frac{A(I)}{2} \Rightarrow \frac{A(I)}{z(I)} \le 2 = r(A)
+$$
+
+Por el otro lado, si tenemos una cantidad impar de paquetes, vemos que:
+
+$$
+P_1 + P_2 > 1
+$$
+
+$$
+P_3 + P_4 > 1
+$$
+
+$$
+P_5 + P_6 > 1
+$$
+
+$$
+\vdots
+$$
+
+$$
+P_{A(I)-2} + P_{A(I)-1} > 1
+$$
+
+Si lo expresamos como una sumatoria y agregamos el ultimo paquete:
+
+$$
+(\sum_{i=1}^{A(I)-1} P_i) + P_{A(I)} > \frac{A(I)-1}{2} + P_{A(I)}
+$$
+
+Por el mismo motivo descrito anteriormente, el mejor empaquetamiento posible es aquel en el que todos los paquetes estan llenos. Por lo tanto:
+
+$$
+z(I) \ge \sum_{i=1}^{n} a_i = (\sum_{i=1}^{A(I)-1} P_i) + P_{A(I)}
+$$
+
+Nuevamente, llegamos a lo siguiente:
+
+$$
+z(I) \ge \frac{A(I)-1}{2} \Rightarrow \frac{A(I)-1}{z(I)} \le 2 = r(A)
 $$
 
 En conclusion, el algoritmo provisto es una 2-aproximacion de la solucion optima.
