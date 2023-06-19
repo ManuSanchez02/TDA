@@ -222,16 +222,28 @@ $$
 (\sum_{i=1}^{A(I)-1} P_i) + P_{A(I)} > \frac{A(I)-1}{2} + P_{A(I)}
 $$
 
+Simplificamos a la siguiente expresion
+
+$$
+\sum_{i=1}^{A(I)-1} P_i > \frac{A(I)-1}{2}
+$$
+
 Por el mismo motivo descrito anteriormente, el mejor empaquetamiento posible es aquel en el que todos los paquetes estan llenos. Por lo tanto:
 
 $$
-z(I) \ge \sum_{i=1}^{n} a_i = (\sum_{i=1}^{A(I)-1} P_i) + P_{A(I)}
+z(I) \ge \sum_{i=1}^{n} a_i = \sum_{i=1}^{A(I)} P_i
+$$
+
+Reemplazando con la expresion anterior:
+
+$$
+z(I) \ge \sum_{i=1}^{A(I)} P_i > \sum_{i=1}^{A(I)-1} P_i > \frac{A(I)-1}{2}
 $$
 
 Nuevamente, llegamos a lo siguiente:
 
 $$
-z(I) \ge \frac{A(I)-1}{2} \Rightarrow \frac{A(I)-1}{z(I)} \le 2 = r(A)
+z(I) > \frac{A(I)-1}{2} \Rightarrow \frac{A(I)-1}{z(I)} < 2 = r(A)
 $$
 
 En conclusion, el algoritmo provisto es una 2-aproximacion de la solucion optima.
